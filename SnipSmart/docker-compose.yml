@@ -1,0 +1,6 @@
+﻿services:
+  snipsmart:
+    image: snipsmart
+    build:
+      context: .
+      dockerfile: SnipSmart/Dockerfile

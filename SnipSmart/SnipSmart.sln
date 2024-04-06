@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnipSmart", "SnipSmart\SnipSmart.csproj", "{850FCF62-CA4C-4DD2-A303-6A722B80926E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7426CB0F-EE8A-4746-996A-1B8BB023A1F2}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{850FCF62-CA4C-4DD2-A303-6A722B80926E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{850FCF62-CA4C-4DD2-A303-6A722B80926E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{850FCF62-CA4C-4DD2-A303-6A722B80926E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{850FCF62-CA4C-4DD2-A303-6A722B80926E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
