@@ -32,17 +32,20 @@ builder.Services.AddAuthentication(option =>
     option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
-{
+{ 
     options.SaveToken = true;
     options.RequireHttpsMetadata = true;
     options.TokenValidationParameters = new TokenValidationParameters()
     {
+        // Ensure that User.Identity.Name is set correctly after login
+        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidAudience = "http://www.security.org",
         ValidIssuer = "http://www.security.org",
         IssuerSigningKey = new SymmetricSecurityKey
-            (Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelye"))
+            (Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelyegfgfgfgfgfgf")),
     };
 });
 

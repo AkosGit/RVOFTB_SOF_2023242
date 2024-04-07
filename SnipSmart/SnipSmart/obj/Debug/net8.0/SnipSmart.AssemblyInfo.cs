@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SnipSmart")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+586e2091bdb9b52e2ac71f4eb0bcf9695594e451")]
 [assembly: System.Reflection.AssemblyProductAttribute("SnipSmart")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SnipSmart")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

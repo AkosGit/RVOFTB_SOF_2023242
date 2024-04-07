@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Wc2/I6+RCXzOSKPilV0l8t/eT0tuAFBc1/BNklV0TsY6qK9PBhJNuV7lEBR/1+NA32nzlBEYSPdnVeH0FeKBUg==",
+  "dgSpecHash": "3EiHF327PQ3dEBy45O0gsds3Tk+uZRH7L5cVisgnqXE327DF3RdUuzvEj/d+h7B8TkaYCz4t+VxBBrsZidnEow==",
   "success": true,
-  "projectFilePath": "/home/akos/RiderProjects/SnipSmart/SnipSmart/SnipSmart.csproj",
+  "projectFilePath": "/home/akos/Documents/GitHub/RVOFTB_SOF_2023242/SnipSmart/SnipSmart/SnipSmart.csproj",
   "expectedPackageFiles": [
     "/home/akos/.nuget/packages/castle.core/5.1.1/castle.core.5.1.1.nupkg.sha512",
     "/home/akos/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",

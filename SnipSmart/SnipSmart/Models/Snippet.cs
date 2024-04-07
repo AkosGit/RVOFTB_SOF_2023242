@@ -6,9 +6,9 @@ namespace SnipSmart.Models;
 public class Snippet : ISnippetModel
 {
     [Key]
-    public string SnippetID { get; set; }
-    public string UserID { get; set; }
-    public string CollectionID { get; set; }
+    public string? SnippetID { get; set; }
+    public string? UserID { get; set; }
+    public string? CollectionID { get; set; }
     
     //virtual members
     [NotMapped]
@@ -27,6 +27,6 @@ public class Snippet : ISnippetModel
 
     public Snippet()
     {
-        this.CollectionID = Guid.NewGuid().ToString();
+        this.SnippetID = Guid.NewGuid().ToString();
     }
 }

@@ -7,8 +7,8 @@ public class Collection : ICollectionModel
 {
     
     [Key]
-    public string CollectionID { get; set; }
-    public string UserID { get; set; }
+    public string? CollectionID { get; set; }
+    public string? UserID { get; set; }
 
 
     [NotMapped]

@@ -34,12 +34,13 @@ namespace SnipSmart.Controllers;
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                    //new Claim(ClaimTypes.Name, applicationUser.UserName),
                 };
                 foreach (var role in await _userManager.GetRolesAsync(user))
                 {
                     claim.Add(new Claim(ClaimTypes.Role, role));
                 }
-                var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelye"));
+                var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelyegfgfgfgfgfgf"));
                 var token = new JwtSecurityToken(
                  issuer: "http://www.security.org", audience: "http://www.security.org",
                  claims: claim, expires: DateTime.Now.AddMinutes(60),

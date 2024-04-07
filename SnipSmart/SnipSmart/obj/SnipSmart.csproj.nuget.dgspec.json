@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/akos/RiderProjects/SnipSmart/SnipSmart/SnipSmart.csproj": {}
+    "/home/akos/Documents/GitHub/RVOFTB_SOF_2023242/SnipSmart/SnipSmart/SnipSmart.csproj": {}
   },
   "projects": {
-    "/home/akos/RiderProjects/SnipSmart/SnipSmart/SnipSmart.csproj": {
+    "/home/akos/Documents/GitHub/RVOFTB_SOF_2023242/SnipSmart/SnipSmart/SnipSmart.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/akos/RiderProjects/SnipSmart/SnipSmart/SnipSmart.csproj",
+        "projectUniqueName": "/home/akos/Documents/GitHub/RVOFTB_SOF_2023242/SnipSmart/SnipSmart/SnipSmart.csproj",
         "projectName": "SnipSmart",
-        "projectPath": "/home/akos/RiderProjects/SnipSmart/SnipSmart/SnipSmart.csproj",
+        "projectPath": "/home/akos/Documents/GitHub/RVOFTB_SOF_2023242/SnipSmart/SnipSmart/SnipSmart.csproj",
         "packagesPath": "/home/akos/.nuget/packages/",
-        "outputPath": "/home/akos/RiderProjects/SnipSmart/SnipSmart/obj/",
+        "outputPath": "/home/akos/Documents/GitHub/RVOFTB_SOF_2023242/SnipSmart/SnipSmart/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/akos/.nuget/NuGet/NuGet.Config"
