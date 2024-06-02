@@ -1,7 +1,3 @@
-export class SnippetClient {
-  jwt: string
+import { BaseClient } from './BaseClient'
 
-  constructor() {
-    this.jwt = ''
-  }
-}
+export class SnippetClient extends BaseClient {}

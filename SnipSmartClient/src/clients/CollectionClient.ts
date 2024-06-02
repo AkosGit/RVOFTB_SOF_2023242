@@ -1,7 +1,3 @@
-export class CollectionClient {
-  jwt: string
+import { BaseClient } from './BaseClient'
 
-  constructor() {
-    this.jwt = ''
-  }
-}
+export class CollectionClient extends BaseClient {}

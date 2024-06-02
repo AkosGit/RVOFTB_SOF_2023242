@@ -1,7 +1,3 @@
-export class TagClient {
-  jwt: string
+import { BaseClient } from './BaseClient'
 
-  constructor() {
-    this.jwt = ''
-  }
-}
+export class TagClient extends BaseClient {}

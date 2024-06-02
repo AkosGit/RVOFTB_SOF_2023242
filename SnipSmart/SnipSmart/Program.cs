@@ -7,7 +7,16 @@ using SnipSmart.Data;
 using SnipSmart.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+        builder.AllowAnyHeader();
+        builder.AllowAnyMethod();
+    });
+    
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -60,8 +69,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 app.Run();
