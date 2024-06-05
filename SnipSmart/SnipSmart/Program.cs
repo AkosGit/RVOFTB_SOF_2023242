@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option
-        .UseSqlite("Data Source=.\\Database\\Database.db")
+        .UseSqlite("Data Source=./Database/Database.db")
         .UseLazyLoadingProxies();
 });
 builder.Services.AddIdentity<User, IdentityRole>(option =>

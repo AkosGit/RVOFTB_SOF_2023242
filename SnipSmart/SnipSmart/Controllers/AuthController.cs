@@ -65,9 +65,12 @@ namespace SnipSmart.Controllers;
                 SecurityStamp = Guid.NewGuid().ToString(),
                 //FirstName = model.FirstName,
                 //LastName = model.LastName,
+                EmailConfirmed = true,
+                NormalizedUserName= model.UserName.ToUpper() 
             };
             await _userManager.CreateAsync(user, model.Password);
-            await _userManager.AddToRoleAsync(user, "Customer");
+            //doesnt work
+            await _userManager.AddToRoleAsync(user, "User");
             return Ok();
         }
 
@@ -209,7 +212,7 @@ namespace SnipSmart.Controllers;
                 var res = await _userManager.CreateAsync(user);
                 if (res.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Customer");
+                    await _userManager.AddToRoleAsync(user, "User");
                 }
             }
             var appuser = _userManager.Users.FirstOrDefault(t => t.Email == user.Email);

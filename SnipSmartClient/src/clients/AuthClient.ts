@@ -12,4 +12,28 @@ export class AuthClient extends BaseClient {
       throw new Error(`Failed to fetch data: ${error}`)
     }
   }
+
+  public async Register(
+    user: string,
+    pass: string,
+    email: string,
+    firstname: string,
+    lastname: string
+  ): Promise<string> {
+    try {
+      const resp = await axios.put(this.baseUrl + '/auth', {
+        email: email,
+        userName: user,
+        firstName: firstname,
+        lastName: lastname,
+        photoContentType: 'string',
+        //photoData: 'string',
+        password: pass
+      })
+      console.log(resp.data)
+      return resp.data.token
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error}`)
+    }
+  }
 }
