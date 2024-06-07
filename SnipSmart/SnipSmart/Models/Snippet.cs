@@ -7,7 +7,9 @@ public class Snippet : ISnippetModel
 {
     [Key]
     public string? SnippetID { get; set; }
-    public string? UserID { get; set; }
+    [ForeignKey("User")]
+    [MaxLength(450)]
+    public string UserID { get; set; }
     public string? CollectionID { get; set; }
     
     //virtual members
@@ -16,7 +18,7 @@ public class Snippet : ISnippetModel
     [NotMapped]
     public virtual ICollection<Tag>? Tags { get; set; }
     [NotMapped]
-    public virtual  User? User { get; set; } //virtual member
+    public virtual  User User { get; set; } //virtual member
     
     public string Link { get; set; }
     //public byte[] File { get; set; }

@@ -29,15 +29,15 @@ const clients = useClientStore()
 function submit(event: Event) {
   clients.auth
     .Register(username.value, password.value, email.value, firstname.value, lastname.value)
-    .then((t: string) => {
-      clients.updateJWT(t)
-      token.value = t
-      router.push({ name: 'home' })
+    .then(() => {
+      alert('Registration successful!')
+      router.push({ name: 'login' })
       router.forward()
     })
     .catch((error: any) => {
       console.error('Error:', error)
       statusInd.value = 'error'
+      alert('An error has occured:' + error + '!')
     })
 }
 </script>

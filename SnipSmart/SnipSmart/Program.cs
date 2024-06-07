@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SnipSmart.Data;
 using SnipSmart.Models;
+using SnipSmart.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddTransient<IAuthService,AuthService>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
@@ -26,40 +28,32 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
         .UseSqlite("Data Source=./Database/Database.db")
         .UseLazyLoadingProxies();
 });
-builder.Services.AddIdentity<User, IdentityRole>(option =>
-    {
-        option.Password.RequiredLength = 8;
-        option.Password.RequireNonAlphanumeric = false;
-    })
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
-
-builder.Services.AddAuthentication(option =>
-{
-    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{ 
-    options.SaveToken = true;
-    options.RequireHttpsMetadata = true;
-    options.TokenValidationParameters = new TokenValidationParameters()
+// Adding Authentication  
+builder.Services.AddAuthentication(options =>
     {
-        // Ensure that User.Identity.Name is set correctly after login
-        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
 
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidAudience = "http://www.security.org",
-        ValidIssuer = "http://www.security.org",
-        IssuerSigningKey = new SymmetricSecurityKey
-            (Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelyegfgfgfgfgfgf")),
-    };
-});
-
-builder.Services.AddAuthorization();
-
+// Adding Jwt Bearer  
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JWT:ValidAudience"],
+            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+            ClockSkew = TimeSpan.Zero,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+        };
+    });
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -70,6 +64,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

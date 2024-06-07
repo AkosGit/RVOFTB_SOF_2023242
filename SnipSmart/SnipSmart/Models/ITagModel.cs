@@ -1,6 +1,6 @@
 namespace SnipSmart.Models;
 
-public interface ITagModel
+public class ITagModel
 {
     public string SnippetID { get; set; }
     public string TagID { get; set; }

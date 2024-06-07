@@ -6,8 +6,7 @@ namespace SnipSmart.Models;
 
 public class User : IdentityUser
 {
-    [Key]
-    public int UserID { get; set; }
+
 
     //virtual members
     [NotMapped]

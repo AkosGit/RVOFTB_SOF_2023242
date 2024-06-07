@@ -8,11 +8,13 @@ public class Tag : ITagModel
     public string? SnippetID { get; set; }
     [Key]
     public string? TagID { get; set; }
-    public string? UserID { get; set; }
+    [ForeignKey("User")]
+    [MaxLength(450)]
+    public string UserID { get; set; }
     
     //Virtual members
     [NotMapped]
-    public virtual User? User { get; set; } 
+    public virtual User User { get; set; } 
     [NotMapped]
     public virtual Snippet? Snippet { get; set; }
 

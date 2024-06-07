@@ -39,7 +39,7 @@ public class SnippetController : ControllerBase
         //[Route("[action]")]
         [Authorize]
         [HttpPost]
-        public async void AddSnippet([FromBody] Snippet s)
+        public async void AddSnippet([FromBody] ISnippetModel s)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
@@ -51,7 +51,7 @@ public class SnippetController : ControllerBase
         
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> EditSnippet([FromBody] Snippet s)
+        public async Task<IActionResult> EditSnippet([FromBody] ISnippetModel s)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);

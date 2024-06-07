@@ -1,6 +1,6 @@
 namespace SnipSmart.Models;
 
-public interface ISnippetModel
+public class ISnippetModel
 {
     public string SnippetID { get; set; }
     public string UserID { get; set; }

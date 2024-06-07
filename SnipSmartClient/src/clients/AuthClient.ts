@@ -8,7 +8,10 @@ export class AuthClient extends BaseClient {
         password: pass
       })
       return resp.data.token
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
       throw new Error(`Failed to fetch data: ${error}`)
     }
   }
@@ -28,11 +31,15 @@ export class AuthClient extends BaseClient {
         lastName: lastname,
         photoContentType: 'string',
         //photoData: 'string',
-        password: pass
+        password: pass,
+        role: 'User'
       })
       console.log(resp.data)
-      return resp.data.token
-    } catch (error) {
+      return ''
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
       throw new Error(`Failed to fetch data: ${error}`)
     }
   }

@@ -9,6 +9,7 @@
         public string? PhotoContentType { get; set; }
         //public byte[]? PhotoData { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
 
     }
 }

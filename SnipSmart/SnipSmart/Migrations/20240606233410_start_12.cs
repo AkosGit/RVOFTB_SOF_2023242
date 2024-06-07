@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SnipSmart.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class start_12 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,6 @@ namespace SnipSmart.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
-                    UserID = table.Column<int>(type: "INTEGER", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -51,6 +50,19 @@ namespace SnipSmart.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Collections",
+                columns: table => new
+                {
+                    CollectionID = table.Column<string>(type: "TEXT", nullable: false),
+                    UserID = table.Column<string>(type: "TEXT", maxLength: 450, nullable: false),
+                    CollectionName = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Collections", x => x.CollectionID);
                 });
 
             migrationBuilder.CreateTable(
@@ -160,29 +172,11 @@ namespace SnipSmart.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Collections",
-                columns: table => new
-                {
-                    CollectionID = table.Column<string>(type: "TEXT", nullable: false),
-                    UserID = table.Column<string>(type: "TEXT", nullable: true),
-                    CollectionName = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Collections", x => x.CollectionID);
-                    table.ForeignKey(
-                        name: "FK_Collections_AspNetUsers_UserID",
-                        column: x => x.UserID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Snippets",
                 columns: table => new
                 {
                     SnippetID = table.Column<string>(type: "TEXT", nullable: false),
-                    UserID = table.Column<string>(type: "TEXT", nullable: true),
+                    UserID = table.Column<string>(type: "TEXT", maxLength: 450, nullable: false),
                     CollectionID = table.Column<string>(type: "TEXT", nullable: true),
                     Link = table.Column<string>(type: "TEXT", nullable: false),
                     ContentType = table.Column<string>(type: "TEXT", nullable: false),
@@ -193,11 +187,6 @@ namespace SnipSmart.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Snippets", x => x.SnippetID);
-                    table.ForeignKey(
-                        name: "FK_Snippets_AspNetUsers_UserID",
-                        column: x => x.UserID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Snippets_Collections_CollectionID",
                         column: x => x.CollectionID,
@@ -211,17 +200,12 @@ namespace SnipSmart.Migrations
                 {
                     TagID = table.Column<string>(type: "TEXT", nullable: false),
                     SnippetID = table.Column<string>(type: "TEXT", nullable: true),
-                    UserID = table.Column<string>(type: "TEXT", nullable: true),
+                    UserID = table.Column<string>(type: "TEXT", maxLength: 450, nullable: false),
                     TagName = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.TagID);
-                    table.ForeignKey(
-                        name: "FK_Tags_AspNetUsers_UserID",
-                        column: x => x.UserID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tags_Snippets_SnippetID",
                         column: x => x.SnippetID,
@@ -237,11 +221,6 @@ namespace SnipSmart.Migrations
                     { "1", null, "Admin", "ADMIN" },
                     { "2", null, "User", "USER" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserID", "UserName" },
-                values: new object[] { "742d233e-6973-40ee-ad9e-58aa63236e09", 0, "46ab13c2-e7a0-41c6-9a93-280b21f396d6", "test@gmail.com", true, false, null, null, "TEST@GMAIL.COM", "AQAAAAIAAYagAAAAEAuvbPHo7fp1HvIt5YHlfmfNEWjPbE2CH90TrwMLJTR6PCKLjdizLunCa/smWOquXw==", null, false, "c3785a91-d1bb-4a0a-b1d8-640dc2390717", false, 0, "test@gmail.com" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -281,29 +260,14 @@ namespace SnipSmart.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Collections_UserID",
-                table: "Collections",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Snippets_CollectionID",
                 table: "Snippets",
                 column: "CollectionID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Snippets_UserID",
-                table: "Snippets",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Tags_SnippetID",
                 table: "Tags",
                 column: "SnippetID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tags_UserID",
-                table: "Tags",
-                column: "UserID");
         }
 
         /// <inheritdoc />
@@ -331,13 +295,13 @@ namespace SnipSmart.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Snippets");
 
             migrationBuilder.DropTable(
                 name: "Collections");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
         }
     }
 }

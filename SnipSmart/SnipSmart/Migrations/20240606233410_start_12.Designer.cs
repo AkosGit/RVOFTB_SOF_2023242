@@ -11,8 +11,8 @@ using SnipSmart.Data;
 namespace SnipSmart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240407174442_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240606233410_start_12")]
+    partial class start_12
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -176,11 +176,11 @@ namespace SnipSmart.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("TEXT");
 
                     b.HasKey("CollectionID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Collections");
                 });
@@ -214,13 +214,13 @@ namespace SnipSmart.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("TEXT");
 
                     b.HasKey("SnippetID");
 
                     b.HasIndex("CollectionID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Snippets");
                 });
@@ -238,13 +238,13 @@ namespace SnipSmart.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("TEXT");
 
                     b.HasKey("TagID");
 
                     b.HasIndex("SnippetID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Tags");
                 });
@@ -297,9 +297,6 @@ namespace SnipSmart.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -314,24 +311,6 @@ namespace SnipSmart.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "742d233e-6973-40ee-ad9e-58aa63236e09",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "46ab13c2-e7a0-41c6-9a93-280b21f396d6",
-                            Email = "test@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedUserName = "TEST@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAuvbPHo7fp1HvIt5YHlfmfNEWjPbE2CH90TrwMLJTR6PCKLjdizLunCa/smWOquXw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "c3785a91-d1bb-4a0a-b1d8-640dc2390717",
-                            TwoFactorEnabled = false,
-                            UserID = 0,
-                            UserName = "test@gmail.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -385,28 +364,13 @@ namespace SnipSmart.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SnipSmart.Models.Collection", b =>
-                {
-                    b.HasOne("SnipSmart.Models.User", "User")
-                        .WithMany("Collections")
-                        .HasForeignKey("UserID");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SnipSmart.Models.Snippet", b =>
                 {
                     b.HasOne("SnipSmart.Models.Collection", "Collection")
                         .WithMany("Snippets")
                         .HasForeignKey("CollectionID");
 
-                    b.HasOne("SnipSmart.Models.User", "User")
-                        .WithMany("Snippets")
-                        .HasForeignKey("UserID");
-
                     b.Navigation("Collection");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SnipSmart.Models.Tag", b =>
@@ -415,13 +379,7 @@ namespace SnipSmart.Migrations
                         .WithMany("Tags")
                         .HasForeignKey("SnippetID");
 
-                    b.HasOne("SnipSmart.Models.User", "User")
-                        .WithMany("Tags")
-                        .HasForeignKey("UserID");
-
                     b.Navigation("Snippet");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SnipSmart.Models.Collection", b =>
@@ -431,15 +389,6 @@ namespace SnipSmart.Migrations
 
             modelBuilder.Entity("SnipSmart.Models.Snippet", b =>
                 {
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("SnipSmart.Models.User", b =>
-                {
-                    b.Navigation("Collections");
-
-                    b.Navigation("Snippets");
-
                     b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618

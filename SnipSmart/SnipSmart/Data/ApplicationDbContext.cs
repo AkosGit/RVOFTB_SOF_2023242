@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -30,24 +31,8 @@ public class ApplicationDbContext : IdentityDbContext<User>
         //.IsRequired();
         
         
-        modelBuilder.Entity<User>()
-            .HasMany(e => e.Snippets)
-            .WithOne(e => e.User)
-            .HasForeignKey(e => e.UserID);
-        //.IsRequired();
-        modelBuilder.Entity<User>()
-            .HasMany(e => e.Collections)
-            .WithOne(e => e.User)
-            .HasForeignKey(e => e.UserID);
-        //.IsRequired();
-        modelBuilder.Entity<User>()
-            .HasMany(e => e.Tags)
-            .WithOne(e => e.User)
-            .HasForeignKey(e => e.UserID);
-        //.IsRequired();
-        
-        
-        //Adding defualt user
+        base.OnModelCreating(modelBuilder);
+        //Adding default user
         modelBuilder.Entity<IdentityRole>().HasData(
             new { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
             new { Id = "2", Name = "User", NormalizedName = "USER" }
@@ -64,7 +49,6 @@ public class ApplicationDbContext : IdentityDbContext<User>
         };
         test.PasswordHash = ph.HashPassword(test, "test");
         modelBuilder.Entity<User>().HasData(test);
-        
-        base.OnModelCreating(modelBuilder);
+
     }
 }
