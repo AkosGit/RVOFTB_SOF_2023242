@@ -3,7 +3,9 @@ using SnipSmart.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 namespace SnipSmart.Controllers;
+
 
 [ApiController]
 [Route("[controller]")]
@@ -24,16 +26,20 @@ public class SnippetController : ControllerBase
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            return db.Snippets.Where(s => s.UserID==user.Id).Select(s => s as ISnippetModel);
+            return db.Snippets.Where(s => s.UserID==user.Id).Select(s => 
+                new ISnippetModel(){CollectionID = s.CollectionID, SnippetID = s.SnippetID, Content = s.Content, ContentType = s.ContentType, ContentSubType = s.ContentSubType, Link = s.Link, Description = s.Description}
+            );
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public ISnippetModel? GetSnippets(string id)
+        public ISnippetModel? GetSnippet(string id)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            return db.Snippets.Select(s => s as ISnippetModel).FirstOrDefault(t => t.SnippetID == id && t.UserID==user.Id);
+            return db.Snippets.Where(t  => t.SnippetID == id && t.UserID==user.Id).Select(s => 
+                new ISnippetModel(){CollectionID = s.CollectionID, SnippetID = s.SnippetID, Content = s.Content, ContentType = s.ContentType, ContentSubType = s.ContentSubType, Link = s.Link, Description = s.Description}
+            ).FirstOrDefault();
         }
 
         //[Route("[action]")]
@@ -43,9 +49,14 @@ public class SnippetController : ControllerBase
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            s.UserID = user.Id;
-            s.SnippetID = Guid.NewGuid().ToString();
-            db.Snippets.Add(s as Snippet);
+            Snippet obj = new Snippet();
+            obj.UserID = user.Id;
+            obj.ContentType = s.ContentType;
+            obj.Content = s.Content;
+            obj.Description = s.Description;
+            obj.ContentSubType = s.ContentSubType;
+            obj.Link = s.Link;
+            db.Snippets.Add(obj);
             db.SaveChanges();
         }
         

@@ -6,7 +6,7 @@ namespace SnipSmart.Models;
 public class Snippet : ISnippetModel
 {
     [Key]
-    public string? SnippetID { get; set; }
+    public string SnippetID { get; set; }
     [ForeignKey("User")]
     [MaxLength(450)]
     public string UserID { get; set; }

@@ -3,7 +3,6 @@ namespace SnipSmart.Models;
 public class ISnippetModel
 {
     public string SnippetID { get; set; }
-    public string UserID { get; set; }
     public string CollectionID { get; set; }
     
     public string Link { get; set; }

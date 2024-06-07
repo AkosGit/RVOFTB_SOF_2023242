@@ -5,9 +5,9 @@ namespace SnipSmart.Models;
 
 public class Tag : ITagModel
 {
-    public string? SnippetID { get; set; }
+    public string SnippetID { get; set; }
     [Key]
-    public string? TagID { get; set; }
+    public string TagID { get; set; }
     [ForeignKey("User")]
     [MaxLength(450)]
     public string UserID { get; set; }

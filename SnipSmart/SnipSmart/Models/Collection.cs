@@ -7,7 +7,7 @@ public class Collection : ICollectionModel
 {
     
     [Key]
-    public string? CollectionID { get; set; }
+    public string CollectionID { get; set; }
     [ForeignKey("User")]
     [MaxLength(450)]
     public string UserID { get; set; }
