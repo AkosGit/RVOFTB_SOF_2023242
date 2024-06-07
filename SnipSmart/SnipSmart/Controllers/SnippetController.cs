@@ -104,4 +104,27 @@ public class SnippetController : ControllerBase
             
         }
         //----> CRUD ending 
+        [Authorize]
+        [HttpGet("bytag/{tag}")]
+        public IEnumerable<ISnippetModel> GetSnippetsByTag(string tag)
+        {
+            var user = _userManager.Users.FirstOrDefault
+                (t => t.UserName == this.User.Identity.Name);
+            return db.Snippets.Where(s => s.UserID==user.Id && 
+                                          s.Tags.Any(t => t.TagName==tag)).Select(s => 
+                new ISnippetModel(){CollectionID = s.CollectionID, SnippetID = s.SnippetID, Content = s.Content, ContentType = s.ContentType, ContentSubType = s.ContentSubType, Link = s.Link, Description = s.Description}
+            );
+        }
+        
+        [Authorize]
+        [HttpGet("bycontent_type/{content_type}")]
+        public IEnumerable<ISnippetModel> GetSnippetsByContentType(string content_type)
+        {
+            var user = _userManager.Users.FirstOrDefault
+                (t => t.UserName == this.User.Identity.Name);
+            return db.Snippets.Where(s => s.UserID==user.Id && 
+                                          s.ContentType==content_type).Select(s => 
+                new ISnippetModel(){CollectionID = s.CollectionID, SnippetID = s.SnippetID, Content = s.Content, ContentType = s.ContentType, ContentSubType = s.ContentSubType, Link = s.Link, Description = s.Description}
+            );
+        }
     }

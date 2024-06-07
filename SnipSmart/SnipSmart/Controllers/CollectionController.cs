@@ -23,17 +23,17 @@ public class CollectionController : ControllerBase
         public class SnippetAndCollection
         {
             public string SnippetID { get; set; }
-            public string CollectionID { get; set; }
+            public string CollectionName { get; set; }
         }
         
-        [Route("[action]")]
-        [Authorize]
-        [HttpPost]
+        //[Route("[action]")]
+        [Authorize] //works
+        [HttpPost("AddSnippetToCollection")]
         public async Task<IActionResult> AddSnippetToCollection(SnippetAndCollection args)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            var collection = db.Collections.Where(c => c.CollectionID == args.CollectionID && c.UserID==user.Id).FirstOrDefault();
+            var collection = db.Collections.Where(c => c.CollectionName == args.CollectionName && c.UserID==user.Id).FirstOrDefault();
             var snippet = db.Snippets.Where(s => s.SnippetID == args.SnippetID && s.UserID==user.Id).FirstOrDefault();
             if (collection != null && snippet != null)
             {
@@ -45,15 +45,15 @@ public class CollectionController : ControllerBase
             return Unauthorized();
 
         }
-        [Route("[action]")]
-        [Authorize]
-        [HttpDelete]
+        //[Route("[action]")]
+        [Authorize] //works
+        [HttpDelete("RemoveSnippetFromCollection")]
         public async Task<IActionResult> RemoveSnippetFromCollection(SnippetAndCollection args)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            var collection = db.Collections.Where(c => c.CollectionID == args.CollectionID && c.UserID==user.Id).FirstOrDefault();
-            var snippet = db.Snippets.Where(s => s.SnippetID == args.SnippetID && s.UserID==user.Id).FirstOrDefault();
+            var collection = db.Collections.Where(c => c.CollectionName == args.CollectionName && c.UserID==user.Id).FirstOrDefault();
+            var snippet = db.Snippets.Where(s => s.SnippetID == args.SnippetID && s.UserID==user.Id && s.CollectionID==collection.CollectionID).FirstOrDefault();
             if (collection != null && snippet != null)
             {
                 //snippet.CollectionID = CollectionID;
@@ -61,20 +61,34 @@ public class CollectionController : ControllerBase
                 db.SaveChanges();
                 return Ok();
             }
+            if (collection == null || snippet == null)
+            {
+                return NotFound();
+            }
             return Unauthorized();
 
         }
-        [Route("[action]")]
-        [Authorize]
-        [HttpGet]
-        public async Task<IEnumerable<ISnippetModel>> GetSnippetsFromCollection([FromBody] string CollectionID)
+        //[Route("[action]")]
+        [Authorize] //works
+        [HttpGet("GetSnippetsFromCollection/{CollectionID}")]
+        public async Task<IEnumerable<ISnippetModel>> GetSnippetsFromCollection(string CollectionID)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
             var collection = db.Collections.Where(c => c.CollectionID == CollectionID && c.UserID==user.Id).FirstOrDefault();
             if (collection != null)
             {
-                return collection.Snippets.Select(s=> s as ISnippetModel);
+                return collection.Snippets.Select(s=> new ISnippetModel()
+                {
+                    SnippetID=s.SnippetID,
+                    CollectionID = s.CollectionID,
+                    Link = s.Link,
+                    ContentType = s.ContentType,
+                    ContentSubType = s.ContentSubType,
+                    Content = s.Content,
+                    Description = s.Description
+                    
+                });
             }
 
             return new List<ISnippetModel>();
@@ -84,39 +98,48 @@ public class CollectionController : ControllerBase
         
         
         //CRUD starting ---->
-        [HttpGet]
+        [HttpGet] //works
         [Authorize]
         public IEnumerable<ICollectionModel> GetCollections()
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            return db.Collections.Where(s => s.UserID==user.Id).Select(s => s as ICollectionModel);
+            return db.Collections.Where(s => s.UserID==user.Id).Select(s => new ICollectionModel()
+            {
+                CollectionID = s.CollectionID,
+                CollectionName = s.CollectionName
+            });
         }
         
-        [Authorize]
+        [Authorize] //Works
         [HttpGet("{id}")]
-        public ICollectionModel? GetCollections(string id)
+        public ICollectionModel? GetCollection(string id)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            return db.Collections.FirstOrDefault(t => t.CollectionID == id && t.UserID==user.Id);
+            return db.Collections.Where(t => t.CollectionID == id && t.UserID==user.Id).Select(s => new ICollectionModel()
+            {
+                CollectionID = s.CollectionID,
+                CollectionName = s.CollectionName
+            }).FirstOrDefault();
         }
 
         //[Route("[action]")]
         [Authorize]
-        [HttpPost]
+        [HttpPost] //works
         public async void AddCollection([FromBody] ICollectionModel s)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            s.UserID = user.Id;
-            s.CollectionID = Guid.NewGuid().ToString();
-            db.Collections.Add(s as Collection);
+            Collection obj = new Collection();
+            obj.UserID = user.Id;
+            obj.CollectionName = s.CollectionName;
+            db.Collections.Add(obj);
             db.SaveChanges();
         }
         
         [Authorize]
-        [HttpPut]
+        [HttpPut] //works
         public async Task<IActionResult> EditCollection([FromBody] ICollectionModel s)
         {
             var user = _userManager.Users.FirstOrDefault
@@ -135,7 +158,7 @@ public class CollectionController : ControllerBase
             
         }
         
-        [Authorize]
+        [Authorize] //works
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCollection(string id)
         {

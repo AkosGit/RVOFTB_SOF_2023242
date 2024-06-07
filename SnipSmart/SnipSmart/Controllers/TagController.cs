@@ -23,9 +23,10 @@ public class TagController : ControllerBase
             public string SnippetID { get; set; }
             public string TagName { get; set; }
         }
-        [Route("[action]")]
-        [Authorize]
-        [HttpPost]
+        
+        //[Route("[action]")]
+        [Authorize] //works
+        [HttpPost("AddTagToSnippet")]
         public async Task<IActionResult> AddTagToSnippet(SnippetAndTag args)
         {
             var user = _userManager.Users.FirstOrDefault
@@ -37,8 +38,8 @@ public class TagController : ControllerBase
                 {
                     Tag tag = new Tag();
                     tag.TagName = args.TagName;
+                    tag.SnippetID = snippet.SnippetID;
                     tag.UserID = user.Id;
-                    AddTag(tag);
                     snippet.Tags.Add(tag);
                     db.SaveChanges();
                 }
@@ -47,9 +48,9 @@ public class TagController : ControllerBase
             return Unauthorized();
 
         }
-        [Route("[action]")]
+        //[Route("[action]")]
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("RemoveTagFromSnippet")]
         public async Task<IActionResult> RemoveTagFromSnippet(SnippetAndTag args)
         {
             var user = _userManager.Users.FirstOrDefault
@@ -65,63 +66,57 @@ public class TagController : ControllerBase
             return Unauthorized();
 
         }
-        [Route("[action]")]
-        [Authorize]
-        [HttpGet]
-        public async Task<ICollection<ITagModel>> GetTagsFromSnippet([FromBody] string SnippetID)
+        //[Route("[action]")]
+        [Authorize] //works
+        [HttpGet("GetTagsFromSnippet/{SnippetID}")]
+        public IEnumerable<ITagModel> GetTagsFromSnippet(string SnippetID)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            var tags = db.Snippets.Where(s => s.SnippetID==SnippetID && s.UserID==user.Id).Select(s => s.Tags);
-            if (tags != null)
-            {
-                return tags.Select(s => s as ITagModel).ToList();
-            }
-
-            return new List<ITagModel>();
+            return db.Snippets
+                .Where(s => s.SnippetID == SnippetID && s.UserID == user.Id)
+                .SelectMany(s => s.Tags)
+                .Select(t => new ITagModel()
+                {
+                    SnippetID = t.SnippetID,
+                    TagID = t.TagID,
+                    TagName = t.TagName
+                });
 
         }
         
         
         //CRUD starting ---->
         [Authorize]
-        [HttpGet]
-        public IEnumerable<ITagModel> GetTags()
+        [HttpGet] //works
+        public IEnumerable<String> GetTags()
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            return db.Tags.Where( s => s.UserID==user.Id).Select( s=> s as ITagModel);
+            return db.Tags.Where( s => s.UserID==user.Id).Select(s => s.TagName).Distinct();
         }
         
         [HttpGet("{id}")]
+        [Authorize] //works
+        public ITagModel GetTag(string id)
+        {
+            var user = _userManager.Users.FirstOrDefault
+                (t => t.UserName == this.User.Identity.Name);
+            return db.Tags.Where(t => t.TagID == id && t.UserID == user.Id).Select(t => new ITagModel()
+            {
+                SnippetID = t.SnippetID,
+                TagID = t.TagID,
+                TagName = t.TagName
+            }).FirstOrDefault();
+        }
+        
         [Authorize]
-        public ITagModel GetTags(string id)
-        {
-            var user = _userManager.Users.FirstOrDefault
-                (t => t.UserName == this.User.Identity.Name);
-            return db.Tags.FirstOrDefault(t => t.TagID == id && t.UserID == user.Id)  as  ITagModel;
-        }
-
-        //[Route("[action]")]
-        //[Authorize]
-        //[HttpPost]
-        [NonAction]
-        public async void AddTag([FromBody] ITagModel s)
-        {
-            var user = _userManager.Users.FirstOrDefault
-                (t => t.UserName == this.User.Identity.Name);
-            db.Tags.Add(s as Tag);
-            s.UserID = user.Id;
-            s.TagID = Guid.NewGuid().ToString();
-            db.SaveChanges();
-        }
-    
-        [NonAction]
+        [HttpPut] //works
         public async Task<IActionResult> EditTag([FromBody] ITagModel s)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
-            var old = db.Tags.FirstOrDefault(t => t.TagID == s.TagID && s.UserID==user.Id) ;
+            var old = db.Tags.Where(t => t.TagID == s.TagID && t.UserID==user.Id).FirstOrDefault() ;
             if (old != null)
             {
                 old.TagName = s.TagName;
@@ -136,7 +131,7 @@ public class TagController : ControllerBase
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize] //works
         public async Task<IActionResult> DeleteTag(string id)
         {
             var user = _userManager.Users.FirstOrDefault
