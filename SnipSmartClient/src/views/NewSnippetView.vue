@@ -14,6 +14,6 @@ const $cookies = inject<VueCookies>('$cookies')
 
 <template>
   <main>
-    <TheWelcome />
+    <p>new snippetssssss page</p>
   </main>
 </template>

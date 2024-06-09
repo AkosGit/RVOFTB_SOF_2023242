@@ -95,6 +95,32 @@ public class CollectionController : ControllerBase
 
         }
         
+        [Authorize] //works
+        [HttpGet("GetSnippetsWithoutCollection")]
+        public async Task<IEnumerable<ISnippetModel>> GetSnippetsWithoutCollection()
+        {
+            var user = _userManager.Users.FirstOrDefault
+                (t => t.UserName == this.User.Identity.Name);
+            var snippets = db.Snippets.Where(c => c.CollectionID == null  && c.UserID==user.Id);
+            if (snippets != null)
+            {
+                return snippets.Select(s=> new ISnippetModel()
+                {
+                    SnippetID=s.SnippetID,
+                    CollectionID = s.CollectionID,
+                    Link = s.Link,
+                    ContentType = s.ContentType,
+                    ContentSubType = s.ContentSubType,
+                    Content = s.Content,
+                    Description = s.Description
+                    
+                });
+            }
+
+            return new List<ISnippetModel>();
+
+        }
+        
         
         
         //CRUD starting ---->

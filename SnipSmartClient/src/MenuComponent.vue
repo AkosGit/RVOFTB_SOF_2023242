@@ -1,14 +1,20 @@
 <script lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import { defineComponent, h, ref, type Component } from 'vue'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { defineComponent, h, inject, ref, watch, type Component } from 'vue'
 import { NIcon, NLayoutSider, NLayout, NSpace, NMenu, NSwitch } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import {
   BookOutline as BookIcon,
   PersonOutline as PersonIcon,
   WineOutline as WineIcon,
-  HomeOutline as HomeIcon
+  HomeOutline as HomeIcon,
+  SearchOutline as SearchIcon,
+  PersonCircleOutline as UserIcon,
+  FolderOpenOutline as CollectionsIcon,
+  AddCircleOutline as NewSnippetIcon
 } from '@vicons/ionicons5'
+import { useClientStore } from './stores/clients'
+import type { VueCookies } from 'vue-cookies'
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -33,76 +39,77 @@ const menuOptions: MenuOption[] = [
     icon: renderIcon(HomeIcon)
   },
   {
-    label: 'Hear the Wind Sing',
-    key: 'hear-the-wind-sing',
-    icon: renderIcon(BookIcon)
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'newsnippet',
+            params: {
+              lang: 'en-US'
+            }
+          }
+        },
+        { default: () => 'New Snippet' }
+      ),
+    key: 'go-new-snippet',
+    icon: renderIcon(NewSnippetIcon)
   },
   {
-    label: 'Pinball 1973',
-    key: 'pinball-1973',
-    icon: renderIcon(BookIcon),
-    disabled: true,
-    children: [
-      {
-        label: 'Rat',
-        key: 'rat'
-      }
-    ]
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'search',
+            params: {
+              lang: 'en-US'
+            }
+          }
+        },
+        { default: () => 'Search' }
+      ),
+    key: 'go-search',
+    icon: renderIcon(SearchIcon)
   },
   {
-    label: 'A Wild Sheep Chase',
-    key: 'a-wild-sheep-chase',
-    disabled: true,
-    icon: renderIcon(BookIcon)
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'collections',
+            params: {
+              lang: 'en-US'
+            }
+          }
+        },
+        { default: () => 'Collections' }
+      ),
+    key: 'go-collections',
+    icon: renderIcon(CollectionsIcon)
   },
   {
-    label: 'Dance Dance Dance',
-    key: 'Dance Dance Dance',
-    icon: renderIcon(BookIcon),
-    children: [
-      {
-        type: 'group',
-        label: 'People',
-        key: 'people',
-        children: [
-          {
-            label: 'Narrator',
-            key: 'narrator',
-            icon: renderIcon(PersonIcon)
-          },
-          {
-            label: 'Sheep Man',
-            key: 'sheep-man',
-            icon: renderIcon(PersonIcon)
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'register',
+            params: {
+              lang: 'en-US'
+            }
           }
-        ]
-      },
-      {
-        label: 'Beverage',
-        key: 'beverage',
-        icon: renderIcon(WineIcon),
-        children: [
-          {
-            label: 'Whisky',
-            key: 'whisky'
-          }
-        ]
-      },
-      {
-        label: 'Food',
-        key: 'food',
-        children: [
-          {
-            label: 'Sandwich',
-            key: 'sandwich'
-          }
-        ]
-      },
-      {
-        label: 'The past increases. The future recedes.',
-        key: 'the-past-increases-the-future-recedes'
-      }
-    ]
+        },
+        { default: () => 'Register new user' }
+      ),
+    key: 'go-register',
+    icon: renderIcon(UserIcon)
+  },
+  {
+    label: 'Logout',
+    key: 'logout',
+    icon: renderIcon(UserIcon)
   }
 ]
 
@@ -116,8 +123,29 @@ export default defineComponent({
   },
   setup() {
     const collapsed = ref(true)
+    const activeKey = ref<string | null>(null)
+
+    const router = useRouter()
+    const route = useRoute()
+    const clients = useClientStore()
+    const $cookies = inject<VueCookies>('$cookies')
+
+    function Logout() {
+      if ($cookies) {
+        $cookies.remove('token')
+        clients.updateJWT('')
+        router.push({ name: 'login' })
+        router.forward()
+      }
+    }
+
+    watch(activeKey, async (newkey, oldkey) => {
+      if (newkey == 'logout') {
+        Logout()
+      }
+    })
     return {
-      activeKey: ref<string | null>(null),
+      activeKey,
       collapsed,
       menuOptions
     }
@@ -125,10 +153,15 @@ export default defineComponent({
 })
 </script>
 
+<style scoped>
+.container {
+  padding-left: 20px;
+}
+</style>
+
 <template>
   <n-space vertical>
-    <n-switch v-model:value="collapsed" />
-    <n-layout has-sider>
+    <n-layout has-sider style="height: 100vh; width: 100vw">
       <n-layout-sider
         bordered
         collapse-mode="width"
@@ -145,10 +178,13 @@ export default defineComponent({
           :collapsed-width="64"
           :collapsed-icon-size="22"
           :options="menuOptions"
-        />
+        >
+        </n-menu>
       </n-layout-sider>
       <n-layout>
-        <RouterView />
+        <div class="container">
+          <RouterView />
+        </div>
       </n-layout>
     </n-layout>
   </n-space>

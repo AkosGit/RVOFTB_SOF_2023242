@@ -4,13 +4,25 @@
       <n-notification-provider>
         <n-modal-provider>
           <n-dialog-provider>
-            <MenuComponent />
+            <div class="container">
+              <MenuComponent />
+            </div>
           </n-dialog-provider>
         </n-modal-provider>
       </n-notification-provider>
     </n-message-provider>
   </n-loading-bar-provider>
 </template>
+
+<style scoped>
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
 
 <script>
 import { defineComponent } from 'vue'
