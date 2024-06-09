@@ -3,10 +3,9 @@ import { useClientStore } from '@/stores/clients'
 import { inject, ref, watch } from 'vue'
 import type { VueCookies } from 'vue-cookies'
 import { NFlex, NInput, NCard, NButton } from 'naive-ui'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const route = useRoute()
 
 const statusInd = ref<undefined | 'warning' | 'error'>(undefined)
 const token = ref('')

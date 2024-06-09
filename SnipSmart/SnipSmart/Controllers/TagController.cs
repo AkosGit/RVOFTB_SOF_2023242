@@ -27,7 +27,7 @@ public class TagController : ControllerBase
         //[Route("[action]")]
         [Authorize] //works
         [HttpPost("AddTagToSnippet")]
-        public async Task<IActionResult> AddTagToSnippet(SnippetAndTag args)
+        public async Task<string> AddTagToSnippet(SnippetAndTag args)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
@@ -42,10 +42,11 @@ public class TagController : ControllerBase
                     tag.UserID = user.Id;
                     snippet.Tags.Add(tag);
                     db.SaveChanges();
+                    return tag.TagID;
                 }
-                return Ok();
             }
-            return Unauthorized();
+
+            return "1";
 
         }
         //[Route("[action]")]

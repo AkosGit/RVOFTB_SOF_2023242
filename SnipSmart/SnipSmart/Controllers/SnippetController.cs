@@ -45,7 +45,7 @@ public class SnippetController : ControllerBase
         //[Route("[action]")]
         [Authorize]
         [HttpPost]
-        public async void AddSnippet([FromBody] ISnippetModel s)
+        public async Task<string> AddSnippet([FromBody] ISnippetModel s)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
@@ -58,6 +58,7 @@ public class SnippetController : ControllerBase
             obj.Link = s.Link;
             db.Snippets.Add(obj);
             db.SaveChanges();
+            return obj.SnippetID;
         }
         
         [Authorize]

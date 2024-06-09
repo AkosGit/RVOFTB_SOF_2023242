@@ -20,7 +20,9 @@ export const useClientStore = defineStore('clients', {
     updateJWT(token: string) {
       this.auth.jwt = token
       this.collection.jwt = token
+      this.snippet.jwt = token
       this.tag.jwt = token
+      console.log(this.collection.jwt)
     }
   }
 })

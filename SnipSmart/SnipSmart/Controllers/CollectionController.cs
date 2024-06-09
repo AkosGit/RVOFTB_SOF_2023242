@@ -153,7 +153,7 @@ public class CollectionController : ControllerBase
         //[Route("[action]")]
         [Authorize]
         [HttpPost] //works
-        public async void AddCollection([FromBody] ICollectionModel s)
+        public async Task<string> AddCollection([FromBody] ICollectionModel s)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
@@ -162,6 +162,7 @@ public class CollectionController : ControllerBase
             obj.CollectionName = s.CollectionName;
             db.Collections.Add(obj);
             db.SaveChanges();
+            return obj.CollectionID;
         }
         
         [Authorize]

@@ -32,8 +32,10 @@ import {
   NMessageProvider,
   NNotificationProvider,
   NModalProvider,
-  NDialogProvider
+  NDialogProvider,
+  NConfigProvider
 } from 'naive-ui'
+
 export default defineComponent({
   components: {
     MenuComponent,
