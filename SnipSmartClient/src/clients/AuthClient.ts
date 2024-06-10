@@ -34,7 +34,6 @@ export class AuthClient extends BaseClient {
         password: pass,
         role: 'User'
       })
-      console.log(resp.data)
       return ''
     } catch (error: any) {
       if (error.response) {

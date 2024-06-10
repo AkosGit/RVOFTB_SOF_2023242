@@ -28,26 +28,23 @@ function GetCollections() {
 }
 
 function GoToSnippets(collectionID: string) {
-  clients.collection
-    .GetSnippetsFromCollection(collectionID)
-    .then((s: Array<SnippetModel>) => {
-      console.log(s)
-      snippets.snippets = s
-      router.push({ name: 'home' })
-      router.forward()
-    })
-    .catch((error: any) => {})
+  snippets.snippetSource = 'COLLECTION'
+  snippets.collectionID = collectionID
+  snippets.isSearchInProgress = true
+  router.push({ name: 'home' })
+  router.forward()
 }
 function OtherSnippets() {
-  clients.collection
-    .GetSnippetsWithoutCollection()
-    .then((s: Array<SnippetModel>) => {
-      console.log(s)
-      snippets.snippets = s
-      router.push({ name: 'home' })
-      router.forward()
-    })
-    .catch((error: any) => {})
+  snippets.snippetSource = 'OTHER'
+  snippets.isSearchInProgress = true
+  router.push({ name: 'home' })
+  router.forward()
+}
+function GetAllSnippets() {
+  snippets.snippetSource = 'ALL'
+  snippets.isSearchInProgress = true
+  router.push({ name: 'home' })
+  router.forward()
 }
 
 function AddNewCollection() {
@@ -63,7 +60,7 @@ GetCollections()
 
 <template>
   <main>
-    <n-flex>
+    <n-flex style="padding-bottom: 5vh">
       <n-popconfirm @positive-text="null" :negative-text="null">
         <template #trigger>
           <n-card style="width: 20vw">
@@ -83,7 +80,14 @@ GetCollections()
         </n-icon>
         <p>Other</p>
       </n-card>
-
+      <n-card style="width: 15vw" v-on:click="GetAllSnippets()">
+        <n-icon>
+          <FolderIcon />
+        </n-icon>
+        <p>All snippets</p>
+      </n-card>
+    </n-flex>
+    <n-flex>
       <div v-for="collection in collections" :key="collection.collectionID">
         <n-card style="width: 15vw" v-on:click="GoToSnippets(collection.collectionID)">
           <n-icon>

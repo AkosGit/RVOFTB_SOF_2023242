@@ -89,12 +89,25 @@ public class TagController : ControllerBase
         
         //CRUD starting ---->
         [Authorize]
-        [HttpGet] //works
-        public IEnumerable<String> GetTags()
+        [HttpGet("GetDistinctNames")] //works
+        public IEnumerable<String> GetDistinctNames()
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
             return db.Tags.Where( s => s.UserID==user.Id).Select(s => s.TagName).Distinct();
+        }
+        [Authorize]
+        [HttpGet] //works
+        public IEnumerable<ITagModel> GetTags()
+        {
+            var user = _userManager.Users.FirstOrDefault
+                (t => t.UserName == this.User.Identity.Name);
+            return db.Tags.Where( s => s.UserID==user.Id).Select(s => new ITagModel()
+            {
+                TagName = s.TagName,
+                SnippetID = s.SnippetID,
+                TagID = s.TagID
+            });
         }
         
         [HttpGet("{id}")]

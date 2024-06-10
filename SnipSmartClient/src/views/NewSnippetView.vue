@@ -10,16 +10,18 @@ import CodeMirror from 'vue-codemirror6'
 // CodeMirror extensions
 import { markdown as md } from '@codemirror/lang-markdown'
 import { json } from '@codemirror/lang-json'
-import { javascript } from '@codemirror/lang-javascript'
+import { javascript, snippets } from '@codemirror/lang-javascript'
 import { python } from '@codemirror/lang-python'
 import type { LanguageSupport } from '@codemirror/language'
 import type { Extension } from '@codemirror/state'
 import type { ViewUpdate } from '@codemirror/view'
 import type { SnippetModel } from '@/models/SnippetModel'
+import { useSnippetStore } from '@/stores/snippets'
 
 const router = useRouter()
 const route = useRoute()
 const clients = useClientStore()
+const snippetsStore = useSnippetStore()
 const $cookies = inject<VueCookies>('$cookies')
 const link = ref('')
 const description = ref('')
@@ -118,6 +120,7 @@ function submit() {
         })
       })
       alert('Snippet created sucessfully!')
+      snippetsStore.isSearchInProgress = true
     })
     .catch((error: any) => {
       console.error('Error:', error)

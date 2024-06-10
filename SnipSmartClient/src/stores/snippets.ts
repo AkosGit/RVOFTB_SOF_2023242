@@ -5,7 +5,13 @@ import { defineStore } from 'pinia'
 export const useSnippetStore = defineStore('snippets', {
   state: () => ({
     snippets: new Array<SnippetModel>(),
-    tags: new Array<TagModel>()
+    tags: new Array<TagModel>(),
+    snippetSource: 'ALL',
+    collectionID: '',
+    isSearchInProgress: false,
+    searchTargetType: '',
+    searchTargetSubType: '',
+    DistinctTagNames: []
   }),
   /*getters: {
         doubleCount: (state) => state.count * 2,

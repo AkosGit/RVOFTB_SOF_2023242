@@ -16,4 +16,26 @@ export class TagClient extends BaseClient {
       throw new Error(`Failed to fetch data: ${error}`)
     }
   }
+  public async GetAllTags(): Promise<Array<TagModel>> {
+    try {
+      const resp = await this.GetAxios().get(this.baseUrl + '/tag', {})
+      return resp.data
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
+      throw new Error(`Failed to fetch data: ${error}`)
+    }
+  }
+  public async GetDistinctNames(): Promise<Array<string>> {
+    try {
+      const resp = await this.GetAxios().get(this.baseUrl + '/tag/GetDistinctNames', {})
+      return resp.data
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
+      throw new Error(`Failed to fetch data: ${error}`)
+    }
+  }
 }

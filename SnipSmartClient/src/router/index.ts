@@ -49,7 +49,6 @@ router.beforeEach(async (to, from) => {
   const clients = useClientStore()
   const $cookies = inject<VueCookies>('$cookies')
   const token = $cookies?.get('token')
-  console.log(token)
   clients.updateJWT(token)
 
   //if no token go to login
