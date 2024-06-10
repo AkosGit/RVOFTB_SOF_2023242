@@ -48,10 +48,10 @@ export class SnippetClient extends BaseClient {
       if (type == 'ALL') {
         return resp.data
       }
-      const result = resp.data.filter((snippet: SnippetModel) => {
-        snippet.contentSubType == subtype
-      })
-      return result
+      console.log('python')
+      console.log(subtype)
+      console.log(resp)
+      return resp.data.filter((snippet: SnippetModel) => snippet.contentSubType === subtype)
     } catch (error: any) {
       if (error.response) {
         throw new Error(`Failed to fetch data: "${error.response.data}"`)

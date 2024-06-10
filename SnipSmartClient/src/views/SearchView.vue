@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useClientStore } from '@/stores/clients'
-import TheWelcome from '../components/TheWelcome.vue'
-import type { VueCookies } from 'vue-cookies'
 import { inject, ref, watch, type Ref } from 'vue'
 import { NSelect, NButton, NFlex } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
@@ -9,7 +6,6 @@ import type { SelectMixedOption } from 'naive-ui/es/select/src/interface'
 import { useSnippetStore } from '@/stores/snippets'
 
 const router = useRouter()
-const clients = useClientStore()
 const snippets = useSnippetStore()
 
 const contentSubTypeValue = ref(undefined)
@@ -28,7 +24,7 @@ const contentTypeOptions = [
     disabled: false
   }
 ]
-watch(contentTypeValue, async (contentType) => {
+watch(contentTypeValue, (contentType) => {
   if (contentType == 'code') {
     contentSubTypeOptions.value = [
       {
@@ -63,25 +59,27 @@ watch(contentTypeValue, async (contentType) => {
     ]
   }
 })
-function search(Event: Event) {
-  console.log('Seeearch')
-  snippets.isSearchInProgress = true
-  snippets.snippetSource = 'SEARCH'
-  snippets.searchTargetType = String(contentTypeValue.value)
-  snippets.searchTargetSubType = String(contentSubTypeValue.value)
-  router.push({ name: 'home' })
-  router.forward()
+
+function search() {
+  if (!contentTypeValue.value || !contentSubTypeValue.value) {
+    alert('Both field have to be field!')
+  } else {
+    snippets.isSearchInProgress = true
+    snippets.snippetSource = 'SEARCH'
+    snippets.searchTargetType = String(contentTypeValue.value)
+    snippets.searchTargetSubType = String(contentSubTypeValue.value)
+    router.push({ name: 'home' })
+    router.forward()
+  }
 }
 </script>
 
 <template>
-  <main>
-    <n-flex :vertical="true">
-      <h4>Content type:</h4>
-      <n-select v-model:value="contentTypeValue" :options="contentTypeOptions" />
-      <h4>Content subtype:</h4>
-      <n-select v-model:value="contentSubTypeValue" :options="contentSubTypeOptions" />
-      <n-button @onclick="search">Search!</n-button>
-    </n-flex>
-  </main>
+  <n-flex :vertical="true">
+    <h4>Content type:</h4>
+    <n-select v-model:value="contentTypeValue" :options="contentTypeOptions" />
+    <h4>Content subtype:</h4>
+    <n-select v-model:value="contentSubTypeValue" :options="contentSubTypeOptions" />
+    <n-button @click="search()">Search!</n-button>
+  </n-flex>
 </template>
