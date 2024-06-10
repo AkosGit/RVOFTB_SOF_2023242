@@ -58,4 +58,41 @@ export class CollectionClient extends BaseClient {
       throw new Error(`Failed to fetch data: ${error}`)
     }
   }
+  public async AddSnippetToCollection(
+    collectionName: string,
+    snippetID: string
+  ): Promise<Array<SnippetModel>> {
+    try {
+      const resp = await this.GetAxios().post(this.baseUrl + '/collection/AddSnippetToCollection', {
+        CollectionName: collectionName,
+        SnippetID: snippetID
+      })
+      return resp.data
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
+      throw new Error(`Failed to fetch data: ${error}`)
+    }
+  }
+  public async RemoveSnippetFromCollection(
+    collectionName: string,
+    snippetID: string
+  ): Promise<Array<SnippetModel>> {
+    try {
+      const resp = await this.GetAxios().post(
+        this.baseUrl + '/collection/RemoveSnippetFromCollection',
+        {
+          CollectionName: collectionName,
+          SnippetID: snippetID
+        }
+      )
+      return resp.data
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
+      throw new Error(`Failed to fetch data: ${error}`)
+    }
+  }
 }

@@ -11,7 +11,9 @@ export const useSnippetStore = defineStore('snippets', {
     isSearchInProgress: false,
     searchTargetType: '',
     searchTargetSubType: '',
-    DistinctTagNames: []
+
+    DistinctTagNames: [],
+    CurrentSnippet: {} as SnippetModel
   }),
   /*getters: {
         doubleCount: (state) => state.count * 2,

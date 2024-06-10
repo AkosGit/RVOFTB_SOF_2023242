@@ -17,7 +17,6 @@ import type { Extension } from '@codemirror/state'
 import type { ViewUpdate } from '@codemirror/view'
 import type { SnippetModel } from '@/models/SnippetModel'
 import { useSnippetStore } from '@/stores/snippets'
-import type { CollectionModel } from '@/models/CollectionModel'
 
 const router = useRouter()
 const route = useRoute()
@@ -28,8 +27,6 @@ const link = ref('')
 const description = ref('')
 const code = ref('')
 const tags = ref([])
-const collectionsSelected = ref(undefined)
-const collectionOptions: Ref<Array<SelectMixedOption>> = ref([])
 //const dark: Ref<boolean> = ref(window.matchMedia('(prefers-color-scheme: dark)').matches)
 const dark: Ref<boolean> = ref(false)
 
@@ -121,13 +118,6 @@ function submit() {
         await clients.tag.AddNewTag(tagName, snippetID).catch((error: any) => {
           console.error('Error:', error)
         })
-        if (collectionsSelected.value != undefined) {
-          await clients.collection
-            .AddSnippetToCollection(String(collectionsSelected.value), snippetID)
-            .catch((error: any) => {
-              console.error('Error:', error)
-            })
-        }
       })
       alert('Snippet created sucessfully!')
       snippetsStore.isSearchInProgress = true
@@ -136,22 +126,6 @@ function submit() {
       console.error('Error:', error)
     })
 }
-function GetCollections() {
-  clients.collection
-    .GetCollections()
-    .then((d: Array<CollectionModel>) => {
-      console.log(d)
-      d.forEach((collection) => {
-        collectionOptions.value.push({
-          label: collection.collectionName,
-          value: collection.collectionName,
-          disabled: false
-        })
-      })
-    })
-    .catch((error: any) => {})
-}
-GetCollections()
 </script>
 
 <template>
@@ -166,12 +140,6 @@ GetCollections()
         <n-select v-model:value="contentTypeValue" :options="contentTypeOptions" />
         <h4>Content subtype:</h4>
         <n-select v-model:value="contentSubTypeValue" :options="contentSubTypeOptions" />
-        <h4>Collection:</h4>
-        <n-select
-          v-model:value="collectionsSelected"
-          :fallback-option="false"
-          :options="collectionOptions"
-        />
         <h4>Content:</h4>
         <code-mirror v-model="code" basic :dark="dark" :lang="lang" />
         <h4>Tags:</h4>

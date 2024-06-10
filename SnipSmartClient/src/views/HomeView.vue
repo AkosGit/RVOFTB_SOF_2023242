@@ -63,6 +63,11 @@ function LoadTagOptions() {
     tagOptions.value.push(obj)
   })
 }
+function EditSnippet(snippet: SnippetModel) {
+  snippets.CurrentSnippet = snippet
+  router.push({ name: 'editsnippet' })
+  router.forward()
+}
 function GetAllTags() {
   clients.tag
     .GetAllTags()
@@ -142,7 +147,7 @@ if (snippets.isSearchInProgress) {
     />
     <div v-if="snippetsSelected.length != 0">
       <n-flex v-for="snippet in snippetsSelected" :key="snippet.snippetID">
-        <n-card style="width: 15vw">
+        <n-card style="width: 15vw" v-on:click="EditSnippet(snippet)">
           <n-flex :vertical="true">
             <a v-bind:href="snippet.link">{{ snippet.link }}</a>
             <p>{{ snippet.description }}</p>

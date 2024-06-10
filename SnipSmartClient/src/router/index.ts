@@ -8,6 +8,8 @@ import RegisterView from '@/views/RegisterView.vue'
 import CollectionsView from '@/views/CollectionsView.vue'
 import SearchView from '@/views/SearchView.vue'
 import NewSnippetView from '@/views/NewSnippetView.vue'
+import Edit from '@/views/NewSnippetView.vue'
+import EditSnippetView from '@/views/EditSnippetView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +43,11 @@ const router = createRouter({
       path: '/newsnippet',
       name: 'newsnippet',
       component: NewSnippetView
+    },
+    {
+      path: '/editsnippet',
+      name: 'editsnippet',
+      component: EditSnippetView
     }
   ]
 })
