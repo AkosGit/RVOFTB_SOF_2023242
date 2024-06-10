@@ -25,6 +25,11 @@ public class CollectionController : ControllerBase
             public string SnippetID { get; set; }
             public string CollectionName { get; set; }
         }
+        public class SnippetAndCollectionById
+        {
+            public string SnippetID { get; set; }
+            public string CollectionID { get; set; }
+        }
         
         //[Route("[action]")]
         [Authorize] //works
@@ -46,13 +51,35 @@ public class CollectionController : ControllerBase
 
         }
         //[Route("[action]")]
-        [Authorize] //works
-        [HttpDelete("RemoveSnippetFromCollection")]
+        [Authorize] //TODO: make delete
+        [HttpPost("RemoveSnippetFromCollection")]
         public async Task<IActionResult> RemoveSnippetFromCollection(SnippetAndCollection args)
         {
             var user = _userManager.Users.FirstOrDefault
                 (t => t.UserName == this.User.Identity.Name);
             var collection = db.Collections.Where(c => c.CollectionName == args.CollectionName && c.UserID==user.Id).FirstOrDefault();
+            var snippet = db.Snippets.Where(s => s.SnippetID == args.SnippetID && s.UserID==user.Id && s.CollectionID==collection.CollectionID).FirstOrDefault();
+            if (collection != null && snippet != null)
+            {
+                //snippet.CollectionID = CollectionID;
+                collection.Snippets.Remove(snippet);
+                db.SaveChanges();
+                return Ok();
+            }
+            if (collection == null || snippet == null)
+            {
+                return NotFound();
+            }
+            return Unauthorized();
+
+        }
+        [Authorize] //works
+        [HttpPost("RemoveSnippetFromCollectionByCollectionID")]
+        public async Task<IActionResult> RemoveSnippetFromCollectionByCollectionID(SnippetAndCollectionById args)
+        {
+            var user = _userManager.Users.FirstOrDefault
+                (t => t.UserName == this.User.Identity.Name);
+            var collection = db.Collections.Where(c => c.CollectionID == args.CollectionID && c.UserID==user.Id).FirstOrDefault();
             var snippet = db.Snippets.Where(s => s.SnippetID == args.SnippetID && s.UserID==user.Id && s.CollectionID==collection.CollectionID).FirstOrDefault();
             if (collection != null && snippet != null)
             {

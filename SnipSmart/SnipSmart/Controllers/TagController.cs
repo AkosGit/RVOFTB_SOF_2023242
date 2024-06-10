@@ -163,5 +163,27 @@ public class TagController : ControllerBase
             }
             
         }
+        [HttpDelete("DeleteTagsFromSnippet/{SnippetID}")]
+        [Authorize] //works
+        public async Task<IActionResult> DeleteTagsFromSnippet(string SnippetID)
+        {
+            var user = _userManager.Users.FirstOrDefault
+                (t => t.UserName == this.User.Identity.Name);
+            var tagsToDelete = db.Tags.Where(t => t.SnippetID == SnippetID && t.UserID==user.Id);
+            if (tagsToDelete != null)
+            {
+                foreach (Tag tag in tagsToDelete)
+                {
+                    db.Tags.Remove(tag);
+                }
+                db.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                throw new ArgumentException("Not your snippet!");
+            }
+            
+        }
         //----> CRUD ending 
     }
