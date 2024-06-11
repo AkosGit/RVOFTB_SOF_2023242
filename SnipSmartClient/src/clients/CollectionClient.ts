@@ -58,6 +58,17 @@ export class CollectionClient extends BaseClient {
       throw new Error(`Failed to fetch data: ${error}`)
     }
   }
+  public async RemoveCollection(collectionID: string): Promise<string> {
+    try {
+      const resp = await this.GetAxios().delete(this.baseUrl + '/collection/' + collectionID, {})
+      return resp.data
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
+      throw new Error(`Failed to fetch data: ${error}`)
+    }
+  }
   public async AddSnippetToCollection(
     collectionName: string,
     snippetID: string

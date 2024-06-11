@@ -28,6 +28,17 @@ export class SnippetClient extends BaseClient {
       throw new Error(`Failed to fetch data: ${error}`)
     }
   }
+  public async RemoveSnippet(SnippetID: string): Promise<string> {
+    try {
+      const resp = await this.GetAxios().delete(this.baseUrl + '/snippet/' + SnippetID, {})
+      return resp.data
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
+      throw new Error(`Failed to fetch data: ${error}`)
+    }
+  }
   public async EditSnippet(
     Link: string,
     ContentType: string,

@@ -22,12 +22,15 @@ public class ApplicationDbContext : IdentityDbContext<User>
         modelBuilder.Entity<Collection>()
             .HasMany(e => e.Snippets)
             .WithOne(e => e.Collection)
-            .HasForeignKey(e => e.CollectionID);
+            .HasForeignKey(e => e.CollectionID)
+            .OnDelete(DeleteBehavior.Cascade); 
+        
         //.IsRequired();
         modelBuilder.Entity<Snippet>()
             .HasMany(e => e.Tags)
             .WithOne(e => e.Snippet)
-            .HasForeignKey(e => e.SnippetID);
+            .HasForeignKey(e => e.SnippetID)
+            .OnDelete(DeleteBehavior.Cascade);
         //.IsRequired();
         
         

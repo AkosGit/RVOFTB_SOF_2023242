@@ -2,12 +2,13 @@
 import { useClientStore } from '@/stores/clients'
 import type { VueCookies } from 'vue-cookies'
 import { inject, ref, watch, type Ref } from 'vue'
-import { NFlex, NCard, NSelect, NDivider } from 'naive-ui'
+import { NFlex, NCard, NSelect, NDivider, NButton } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
 import { useSnippetStore } from '@/stores/snippets'
 import type { SnippetModel } from '@/models/SnippetModel'
 import type { TagModel } from '@/models/TagModel'
 import type { SelectMixedOption } from 'naive-ui/es/select/src/interface'
+import { TrashBinOutline as DeleteIcon } from '@vicons/ionicons5'
 
 const router = useRouter()
 const route = useRoute()
@@ -116,6 +117,21 @@ function trimName(maxchar: number, name: string) {
   }
   return name
 }
+function DeleteCollection(CollectionID: string) {
+  clients.collection
+    .RemoveCollection(CollectionID)
+    .then(() => {
+      alert('Collection removed succesfully!')
+      snippets.snippetSource = 'NONE'
+      snippets.isSearchInProgress = false
+      snippets.snippets = []
+      snippets.tags = []
+      snippets.DistinctTagNames = []
+    })
+    .catch((error: any) => {
+      alert('Collection removal failed!')
+    })
+}
 
 //runtime
 if (snippets.isSearchInProgress) {
@@ -144,23 +160,33 @@ if (snippets.isSearchInProgress) {
 
 <template>
   <div style="width: 100%; height: 100%">
-    <div>
-      <h3 v-if="snippets.snippetSource !== 'NONE'">Current results for:</h3>
-      <h4 class="search-result" v-if="snippets.snippetSource == 'COLLECTION'">
-        '{{ snippets.CollectionName }}' collection
-      </h4>
-      <h4 class="search-result" v-if="snippets.snippetSource == 'OTHER'">
-        Snippets that are not in a collection
-      </h4>
-      <h4 class="search-result" v-if="snippets.snippetSource == 'ALL'">
-        Snippets from all collections
-      </h4>
-      <h4 class="search-result" v-if="snippets.snippetSource == 'SEARCH'">
-        Search for '{{ snippets.searchTargetType }}' content type and '{{
-          snippets.searchTargetSubType
-        }}' content subtype
-      </h4>
-    </div>
+    <n-flex>
+      <div>
+        <h3 v-if="snippets.snippetSource !== 'NONE'">Current results for:</h3>
+        <h4 class="search-result" v-if="snippets.snippetSource === 'COLLECTION'">
+          '{{ snippets.CollectionName }}' collection
+        </h4>
+        <h4 class="search-result" v-if="snippets.snippetSource === 'OTHER'">
+          Snippets that are not in a collection
+        </h4>
+        <h4 class="search-result" v-if="snippets.snippetSource === 'ALL'">
+          Snippets from all collections
+        </h4>
+        <h4 class="search-result" v-if="snippets.snippetSource === 'SEARCH'">
+          Search for '{{ snippets.searchTargetType }}' content type and '{{
+            snippets.searchTargetSubType
+          }}' content subtype
+        </h4>
+      </div>
+      <div
+        v-if="snippets.snippetSource === 'COLLECTION'"
+        style="height: 100%; display: flex; justify-items: center; align-items: center"
+      >
+        <n-button @click="DeleteCollection(snippets.collectionID)" type="error" class="Delete"
+          >Delete collection</n-button
+        >
+      </div>
+    </n-flex>
     <n-divider></n-divider>
     <h3 style="padding-top: 0.5rem">Filter selected snippets by tags:</h3>
     <n-select
@@ -208,5 +234,12 @@ if (snippets.isSearchInProgress) {
 }
 .search-result {
   font-weight: bold;
+}
+.delete {
+  width: 30px;
+  height: 10px;
+}
+.delete:hover {
+  cursor: pointer;
 }
 </style>

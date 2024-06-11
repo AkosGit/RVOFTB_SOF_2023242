@@ -5,17 +5,13 @@ import { inject, ref, watch, type Ref } from 'vue'
 import { NButton, NCard, NFlex, NInput, NCode, NMention, NDynamicTags, NSelect } from 'naive-ui'
 import type { SelectMixedOption } from 'naive-ui/es/select/src/interface'
 import CodeMirror from 'vue-codemirror6'
-// CodeMirror extensions
 import { markdown as md } from '@codemirror/lang-markdown'
 import { json } from '@codemirror/lang-json'
 import { javascript, snippets } from '@codemirror/lang-javascript'
 import { python } from '@codemirror/lang-python'
-import type { LanguageSupport } from '@codemirror/language'
-import type { Extension } from '@codemirror/state'
-import type { ViewUpdate } from '@codemirror/view'
-import { useSnippetStore } from '@/stores/snippets'
 import type { CollectionModel } from '@/models/CollectionModel'
 import type { TagModel } from '@/models/TagModel'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   oldSnippet?: SnippetModel
@@ -24,6 +20,7 @@ const props = defineProps<{
   onSubmitClicked: (snippet: SnippetModel, tags: Array<string>, collectionName?: string) => void
 }>()
 
+const router = useRouter()
 const clients = useClientStore()
 const link = ref('')
 const description = ref('')
@@ -65,6 +62,18 @@ if (props.oldSnippet !== null && props.oldSnippet !== undefined) {
         collectionsSelected.value = collection.collectionName
       })
   }
+}
+function DeleteSnippet() {
+  clients.snippet
+    .RemoveSnippet(String(props.oldSnippet?.snippetID))
+    .then(() => {
+      alert('Snippet deleted sucessfully')
+      router.push({ name: 'home' })
+      router.forward()
+    })
+    .catch(() => {
+      alert('A network error has occured!')
+    })
 }
 function SetLang(subContentType: string) {
   switch (subContentType) {
@@ -221,6 +230,12 @@ GetCollections()
         />
         <h4>Tags:</h4>
         <n-dynamic-tags v-model:value="tags" />
+        <n-button
+          v-if="props.oldSnippet !== null && props.oldSnippet !== undefined"
+          @click="DeleteSnippet()"
+          type="error"
+          >Delete snippet</n-button
+        >
         <n-button @click="submit()">{{ submitMessage }}</n-button>
       </n-flex>
     </n-card>
