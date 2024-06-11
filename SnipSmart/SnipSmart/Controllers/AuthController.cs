@@ -25,6 +25,11 @@ namespace SnipSmart.Controllers;
             _authService = authService;
             _logger = logger;
         }
+        [HttpPost("Health")]
+        public async Task<IActionResult> Health()
+        {
+            return Ok();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)

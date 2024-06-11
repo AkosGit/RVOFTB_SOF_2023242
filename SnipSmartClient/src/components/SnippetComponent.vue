@@ -101,6 +101,7 @@ function SetContentType(contentType: string) {
   }
 }
 watch(contentTypeValue, async (contentType) => {
+  contentSubTypeValue.value = undefined
   SetContentType(String(contentType))
 })
 
@@ -190,29 +191,47 @@ GetCollections()
 </script>
 
 <template>
-  <n-card :title="title">
-    <n-flex vertical>
-      <h4>Content source link:</h4>
-      <n-input v-model:value="link" type="text" placeholder="link" />
-      <h4>Description:</h4>
-      <n-mention type="textarea" v-model:value="description" placeholder="desciption" />
-      <h4>Content type:</h4>
-      <n-select v-model:value="contentTypeValue" :options="contentTypeOptions" />
-      <h4>Content subtype:</h4>
-      <n-select v-model:value="contentSubTypeValue" :options="contentSubTypeOptions" />
-      <h4>Collection:</h4>
-      <n-select
-        v-model:value="collectionsSelected"
-        :fallback-option="false"
-        :options="collectionOptions"
-      />
-      <h4>Content:</h4>
-      <code-mirror v-model="code" basic :dark="dark" :lang="lang" />
-      <h4>Tags:</h4>
-      <n-dynamic-tags v-model:value="tags" />
-      <n-button @click="submit()">{{ submitMessage }}</n-button>
-    </n-flex>
-  </n-card>
+  <div class="editor">
+    <n-card :title="title" style="width: 100%; height: 100%">
+      <n-flex vertical style="width: 100%; height: 100%">
+        <h4>Content source link:</h4>
+        <n-input v-model:value="link" type="text" placeholder="link" />
+        <h4>Description:</h4>
+        <n-mention type="textarea" v-model:value="description" placeholder="desciption" />
+        <h4>Content type:</h4>
+        <n-select v-model:value="contentTypeValue" :options="contentTypeOptions" />
+        <h4>Content subtype:</h4>
+        <n-select v-model:value="contentSubTypeValue" :options="contentSubTypeOptions" />
+        <h4>Collection:</h4>
+        <n-select
+          v-model:value="collectionsSelected"
+          :fallback-option="false"
+          :options="collectionOptions"
+        />
+        <h4>Tags:</h4>
+        <n-dynamic-tags v-model:value="tags" />
+        <n-button @click="submit()">{{ submitMessage }}</n-button>
+      </n-flex>
+    </n-card>
+    <div style="height: 10vh">
+      <code-mirror v-model="code" basic :dark="dark" :lang="lang" style="height: 100%" />
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+/* Desktop view */
+@media (min-width: 768px) {
+  .editor {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+</style>

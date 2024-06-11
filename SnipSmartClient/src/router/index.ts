@@ -10,6 +10,7 @@ import SearchView from '@/views/SearchView.vue'
 import NewSnippetView from '@/views/NewSnippetView.vue'
 import Edit from '@/views/NewSnippetView.vue'
 import EditSnippetView from '@/views/EditSnippetView.vue'
+import NetworkErrorView from '@/views/NetworkErrorView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,25 +49,39 @@ const router = createRouter({
       path: '/editsnippet',
       name: 'editsnippet',
       component: EditSnippetView
+    },
+    {
+      path: '/networkerror',
+      name: 'networkerror',
+      component: NetworkErrorView
     }
   ]
 })
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, from, next) => {
   const clients = useClientStore()
   const $cookies = inject<VueCookies>('$cookies')
   const token = $cookies?.get('token')
   clients.updateJWT(token)
 
-  //if no token go to login
-  if (token == null && to.name !== 'login' && to.name !== 'register') {
-    return { name: 'login' }
+  if (from.name !== 'networkerror') {
+    try {
+      await clients.auth.Health()
+    } catch (e) {
+      console.log('network error', e)
+      next({ name: 'networkerror' })
+    }
   }
 
-  //if login is navigated to when logged in nav to home
-  if (token != null && to.name == 'login') {
-    return { name: 'home' }
+  if (token == null && to.name !== 'login' && to.name !== 'register') {
+    next({ name: 'login' })
   }
+
+  if (token != null && to.name === 'login') {
+    next({ name: 'collections' })
+  }
+
+  next()
 })
 
 export default router

@@ -57,7 +57,5 @@ function submit(snippet: SnippetModel, collectionName: string, tags: Array<strin
 </script>
 
 <template>
-  <main>
-    <SnippetComponent :on-submit-clicked="submit" title="Create new Snippet" submit-message="Add" />
-  </main>
+  <SnippetComponent :on-submit-clicked="submit" title="Create new Snippet" submit-message="Add" />
 </template>

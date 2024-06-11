@@ -155,7 +155,13 @@ export default defineComponent({
 
 <style scoped>
 .container {
-  padding-left: 20px;
+  height: 99%;
+  width: 99%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 7px;
 }
 </style>
 

@@ -37,13 +37,20 @@ function submit(event: Event) {
 </script>
 
 <template>
-  <n-card title="Login">
-    <n-flex vertical>
-      <h2>Username:</h2>
-      <n-input v-model:value="username" type="text" :status="statusInd" placeholder="Username" />
-      <h2>Password</h2>
-      <n-input v-model:value="password" type="text" :status="statusInd" placeholder="Password" />
-      <n-button @click="submit">Login</n-button>
-    </n-flex>
-  </n-card>
+  <n-flex vertical justify="center" align="center" style="width: 100%; height: 100%" :size="[0, 0]">
+    <n-card title="Login" style="max-width: 25vw">
+      <n-flex vertical justify="center">
+        <h4>Username:</h4>
+        <n-input v-model:value="username" type="text" :status="statusInd" placeholder="Username" />
+        <h4>Password</h4>
+        <n-input
+          v-model:value="password"
+          type="password"
+          :status="statusInd"
+          placeholder="Password"
+        />
+        <n-button @click="submit">Login</n-button>
+      </n-flex>
+    </n-card>
+  </n-flex>
 </template>

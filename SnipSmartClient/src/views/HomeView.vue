@@ -64,6 +64,8 @@ function LoadTagOptions() {
   })
 }
 function EditSnippet(snippet: SnippetModel) {
+  console.log('edit sni')
+  console.log(snippet)
   snippets.CurrentSnippet = snippet
   router.push({ name: 'editsnippet' })
   router.forward()
@@ -110,6 +112,12 @@ watch(tagsSelected, (newtagsSelected) => {
     snippetsSelected.value = Array.from(new Set(foundSnippets))
   }
 })
+function trimName(maxchar: number, name: string) {
+  if (name.length - 1 > maxchar) {
+    return name.substring(0, maxchar) + '...'
+  }
+  return name
+}
 
 //runtime
 if (snippets.isSearchInProgress) {
@@ -137,28 +145,46 @@ if (snippets.isSearchInProgress) {
 </script>
 
 <template>
-  <main>
+  <div style="width: 100%; height: 100%">
     <h3>Filter selected snippets by tags:</h3>
     <n-select
+      style="padding-top: 0.5rem; max-width: 20vw"
       v-model:value="tagsSelected"
       multiple
       :fallback-option="false"
       :options="tagOptions"
     />
-    <div v-if="snippetsSelected.length != 0">
-      <n-flex v-for="snippet in snippetsSelected" :key="snippet.snippetID">
-        <n-card style="width: 15vw" v-on:click="EditSnippet(snippet)">
-          <n-flex :vertical="true">
-            <a v-bind:href="snippet.link">{{ snippet.link }}</a>
-            <p>{{ snippet.description }}</p>
-          </n-flex>
-        </n-card>
+    <div v-if="snippetsSelected.length != 0" style="padding-top: 0.7rem">
+      <n-flex>
+        <div v-for="snippet in snippetsSelected" :key="snippet.snippetID">
+          <n-card class="card" v-on:click="EditSnippet(snippet)">
+            <n-flex justify="center" align="center" class="card-flex" :vertical="true">
+              <a v-bind:href="snippet.link">{{
+                trimName(15, snippet.link.replace('http://', '').replace('https://', ''))
+              }}</a>
+              <p>{{ trimName(15, snippet.description) }}</p>
+            </n-flex>
+          </n-card>
+        </div>
       </n-flex>
     </div>
     <div v-else>
-      <h2 style="padding: 3rem">
+      <h3 style="padding-top: 2rem">
         Ooops nothing here, except for pixels. Search snippets or open a collection!
-      </h2>
+      </h3>
     </div>
-  </main>
+  </div>
 </template>
+<style scoped>
+.card:hover {
+  cursor: pointer;
+}
+.card {
+  width: 10.5vw;
+  height: 8.5vw;
+}
+.card-flex {
+  width: 100%;
+  height: 100%;
+}
+</style>

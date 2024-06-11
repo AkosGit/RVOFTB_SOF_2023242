@@ -22,29 +22,39 @@ function submit(snippet: SnippetModel, collectionName: string, tags: Array<strin
       snippet.collectionID
     )
     .then(() => {
-      clients.tag.RemoveTagsFromSnippet(snippet.snippetID).then(() => {
+      clients.tag.RemoveTagsFromSnippet(snippet.snippetID).then(async () => {
         tags.map(async (tagName) => {
           await clients.tag.AddNewTag(tagName, snippet.snippetID).catch((error: any) => {
             console.error('Error:', error)
           })
-          if (collectionName != undefined) {
-            if (snippetsStore.collectionID != '' || snippetsStore.collectionID != undefined) {
-              await clients.collection.RemoveSnippetFromCollectionById(
-                snippetsStore.CurrentSnippet.collectionID,
-                snippet.snippetID
-              )
-            }
-            await clients.collection
-              .AddSnippetToCollection(collectionName, snippet.snippetID)
-              .catch((error: any) => {
-                console.error('Error:', error)
-              })
-          }
         })
-      })
+        console.log(collectionName)
+        if (collectionName != undefined && collectionName != null && collectionName != '') {
+          console.log(snippetsStore.CurrentSnippet.collectionID)
+          if (
+            snippetsStore.CurrentSnippet.collectionID != '' &&
+            snippetsStore.CurrentSnippet.collectionID != undefined &&
+            snippetsStore.CurrentSnippet.collectionID != null
+          ) {
+            console.log('remocing old colelction')
+            await clients.collection.RemoveSnippetFromCollectionById(
+              snippetsStore.CurrentSnippet.collectionID,
+              snippet.snippetID
+            )
+          }
+          await clients.collection
+            .AddSnippetToCollection(collectionName, snippet.snippetID)
+            .catch((error: any) => {
+              console.error('Error:', error)
+            })
 
-      alert('Snippet created sucessfully!')
-      snippetsStore.isSearchInProgress = true
+          alert('Snippet modified sucessfully!')
+          snippetsStore.isSearchInProgress = true
+        } else {
+          alert('Snippet modified sucessfully!')
+          snippetsStore.isSearchInProgress = true
+        }
+      })
     })
     .catch((error: any) => {
       console.error('Error:', error)
@@ -53,12 +63,10 @@ function submit(snippet: SnippetModel, collectionName: string, tags: Array<strin
 </script>
 
 <template>
-  <main>
-    <SnippetComponent
-      :on-submit-clicked="submit"
-      title="Edit snippet"
-      submit-message="Edit"
-      :old-snippet="snippetsStore.CurrentSnippet"
-    />
-  </main>
+  <SnippetComponent
+    :on-submit-clicked="submit"
+    title="Edit snippet"
+    submit-message="Edit"
+    :old-snippet="snippetsStore.CurrentSnippet"
+  />
 </template>

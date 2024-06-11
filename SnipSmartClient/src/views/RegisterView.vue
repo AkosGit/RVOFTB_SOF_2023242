@@ -43,24 +43,31 @@ function submit(event: Event) {
 </script>
 
 <template>
-  <n-card title="Register">
-    <n-flex vertical>
-      <h2>Firstname:</h2>
-      <n-input v-model:value="firstname" type="text" :status="statusInd" placeholder="Firstname" />
-      <h2>Lastname:</h2>
-      <n-input v-model:value="lastname" type="text" :status="statusInd" placeholder="Lastname" />
-      <h2>Username:</h2>
-      <n-input v-model:value="username" type="text" :status="statusInd" placeholder="Username" />
-      <h2>Password:</h2>
-      <n-input
-        v-model:value="password"
-        type="password"
-        :status="statusInd"
-        placeholder="Password"
-      />
-      <h2>Email</h2>
-      <n-input v-model:value="email" type="text" :status="statusInd" placeholder="Email" />
-      <n-button @click="submit">Register</n-button>
-    </n-flex>
-  </n-card>
+  <n-flex vertical justify="center" align="center" style="width: 100%; height: 100%" :size="[0, 0]">
+    <n-card title="Register" style="max-width: 25vw">
+      <n-flex vertical>
+        <h4>Firstname:</h4>
+        <n-input
+          v-model:value="firstname"
+          type="text"
+          :status="statusInd"
+          placeholder="Firstname"
+        />
+        <h4>Lastname:</h4>
+        <n-input v-model:value="lastname" type="text" :status="statusInd" placeholder="Lastname" />
+        <h4>Username:</h4>
+        <n-input v-model:value="username" type="text" :status="statusInd" placeholder="Username" />
+        <h4>Password:</h4>
+        <n-input
+          v-model:value="password"
+          type="password"
+          :status="statusInd"
+          placeholder="Password"
+        />
+        <h4>Email</h4>
+        <n-input v-model:value="email" type="text" :status="statusInd" placeholder="Email" />
+        <n-button @click="submit">Register</n-button>
+      </n-flex>
+    </n-card>
+  </n-flex>
 </template>

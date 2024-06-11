@@ -75,7 +75,7 @@ function search() {
 </script>
 
 <template>
-  <n-flex :vertical="true">
+  <n-flex :vertical="true" style="max-width: 30vw; min-width: 15vw">
     <h4>Content type:</h4>
     <n-select v-model:value="contentTypeValue" :options="contentTypeOptions" />
     <h4>Content subtype:</h4>

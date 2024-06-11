@@ -3,7 +3,17 @@ import { useClientStore } from '@/stores/clients'
 import TheWelcome from '../components/TheWelcome.vue'
 import type { VueCookies } from 'vue-cookies'
 import { inject, ref } from 'vue'
-import { NCard, NIcon, NFlex, NInput, NPopconfirm, NButton, useMessage } from 'naive-ui'
+import {
+  NCard,
+  NIcon,
+  NFlex,
+  NInput,
+  NPopconfirm,
+  NButton,
+  useMessage,
+  NGrid,
+  NGridItem
+} from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
 import type { CollectionModel } from '@/models/CollectionModel'
 import { FolderOutline as FolderIcon, AddCircle as AddIcon } from '@vicons/ionicons5'
@@ -47,6 +57,12 @@ function GetAllSnippets() {
   router.forward()
 }
 
+function trimName(maxchar: number, name: string) {
+  if (name.length - 1 > maxchar) {
+    return name.substring(0, maxchar) + '...'
+  }
+  return name
+}
 function AddNewCollection() {
   clients.collection
     .AddNewCollection(collectionName.value)
@@ -59,43 +75,71 @@ GetCollections()
 </script>
 
 <template>
-  <main>
+  <div style="width: 100%; height: 100%">
     <n-flex style="padding-bottom: 5vh">
       <n-popconfirm @positive-text="null" :negative-text="null">
         <template #trigger>
-          <n-card style="width: 20vw">
-            <n-icon>
-              <AddIcon />
-            </n-icon>
-            <p>new collection</p>
+          <n-card class="card">
+            <n-flex justify="center" align="center" class="card-flex">
+              <n-icon class="card-icon">
+                <AddIcon class="card-icon" />
+              </n-icon>
+              <p>new collection</p>
+            </n-flex>
           </n-card>
         </template>
-        <n-input v-model:value="collectionName" type="text" placeholder="Name" />
-        <n-button v-on:click="AddNewCollection()">Add</n-button>
+        <template #action>
+          <n-input v-model:value="collectionName" type="text" placeholder="Name" />
+          <n-button v-on:click="AddNewCollection()">Add</n-button>
+        </template>
       </n-popconfirm>
 
-      <n-card style="width: 15vw" v-on:click="OtherSnippets()">
-        <n-icon>
-          <FolderIcon />
-        </n-icon>
-        <p>Other</p>
+      <n-card class="card" v-on:click="OtherSnippets()">
+        <n-flex justify="center" align="center" class="card-flex" :vertical="true">
+          <n-icon class="card-icon">
+            <FolderIcon class="card-icon" />
+          </n-icon>
+          <p>Other</p>
+        </n-flex>
       </n-card>
-      <n-card style="width: 15vw" v-on:click="GetAllSnippets()">
-        <n-icon>
-          <FolderIcon />
-        </n-icon>
-        <p>All snippets</p>
+      <n-card class="card" v-on:click="GetAllSnippets()">
+        <n-flex justify="center" align="center" class="card-flex" :vertical="true">
+          <n-icon class="card-icon">
+            <FolderIcon class="card-icon" />
+          </n-icon>
+          <p>All snippets</p>
+        </n-flex>
       </n-card>
     </n-flex>
+
     <n-flex>
       <div v-for="collection in collections" :key="collection.collectionID">
-        <n-card style="width: 15vw" v-on:click="GoToSnippets(collection.collectionID)">
-          <n-icon>
-            <FolderIcon />
-          </n-icon>
-          <p>{{ collection.collectionName }}</p>
+        <n-card class="card" v-on:click="GoToSnippets(collection.collectionID)">
+          <n-flex justify="center" align="center" class="card-flex" :vertical="true">
+            <n-icon class="card-icon">
+              <FolderIcon class="card-icon" />
+            </n-icon>
+            <p>{{ trimName(16, collection.collectionName) }}</p>
+          </n-flex>
         </n-card>
       </div>
     </n-flex>
-  </main>
+  </div>
 </template>
+<style scoped>
+.card:hover {
+  cursor: pointer;
+}
+.card {
+  width: 10.5vw;
+  height: 8.5vw;
+}
+.card-flex {
+  width: 100%;
+  height: 100%;
+}
+.card-icon {
+  width: 2.2vw;
+  height: 2.2vw;
+}
+</style>

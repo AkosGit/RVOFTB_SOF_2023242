@@ -15,6 +15,17 @@ export class AuthClient extends BaseClient {
       throw new Error(`Failed to fetch data: ${error}`)
     }
   }
+  public async Health() {
+    try {
+      const resp = await axios.post(this.baseUrl + '/auth/health', {})
+      return resp.data.token
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(`Failed to fetch data: "${error.response.data}"`)
+      }
+      throw new Error(`Failed to fetch data: ${error}`)
+    }
+  }
 
   public async Register(
     user: string,
