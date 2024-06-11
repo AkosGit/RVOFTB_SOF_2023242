@@ -4,7 +4,7 @@ import type { VueCookies } from 'vue-cookies'
 
 export class BaseClient {
   jwt = ''
-  baseUrl: string = 'http://localho.st:5132'
+  baseUrl: string = 'http://0.0.0.0:8080'
   GetAxios() {
     return axios.create({
       baseURL: this.baseUrl,
