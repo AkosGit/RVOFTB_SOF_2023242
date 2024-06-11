@@ -5,7 +5,9 @@
         <n-modal-provider>
           <n-dialog-provider>
             <div class="container">
-              <MenuComponent />
+              <n-config-provider :theme="darkTheme">
+                <MenuComponent />
+              </n-config-provider>
             </div>
           </n-dialog-provider>
         </n-modal-provider>
@@ -35,8 +37,14 @@ import {
   NDialogProvider,
   NConfigProvider
 } from 'naive-ui'
+import { darkTheme } from 'naive-ui'
 
 export default defineComponent({
+  setup() {
+    return {
+      darkTheme
+    }
+  },
   components: {
     MenuComponent,
     NLoadingBarProvider,

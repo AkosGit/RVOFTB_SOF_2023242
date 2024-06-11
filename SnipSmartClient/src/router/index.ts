@@ -73,11 +73,11 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  if (token == null && to.name !== 'login' && to.name !== 'register') {
+  if (token === null && to.name !== 'login' && to.name !== 'register') {
     next({ name: 'login' })
   }
 
-  if (token != null && to.name === 'login') {
+  if (token !== null && to.name === 'login') {
     next({ name: 'collections' })
   }
 

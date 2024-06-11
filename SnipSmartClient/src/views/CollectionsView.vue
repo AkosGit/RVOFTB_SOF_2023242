@@ -1,20 +1,8 @@
 <script setup lang="ts">
 import { useClientStore } from '@/stores/clients'
-import TheWelcome from '../components/TheWelcome.vue'
 import type { VueCookies } from 'vue-cookies'
 import { inject, ref } from 'vue'
-import {
-  NCard,
-  NIcon,
-  NFlex,
-  NInput,
-  NPopconfirm,
-  NButton,
-  useMessage,
-  NGrid,
-  NGridItem,
-  NDivider
-} from 'naive-ui'
+import { NCard, NIcon, NFlex, NInput, NPopconfirm, NButton, useMessage, NDivider } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
 import type { CollectionModel } from '@/models/CollectionModel'
 import { FolderOutline as FolderIcon, AddCircle as AddIcon } from '@vicons/ionicons5'

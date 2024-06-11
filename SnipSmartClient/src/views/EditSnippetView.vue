@@ -10,7 +10,7 @@ const route = useRoute()
 const clients = useClientStore()
 const snippetsStore = useSnippetStore()
 
-function submit(snippet: SnippetModel, collectionName: string, tags: Array<string>) {
+function submit(snippet: SnippetModel, tags: Array<string>, collectionName?: string) {
   clients.snippet
     .EditSnippet(
       snippet.link,
@@ -23,20 +23,24 @@ function submit(snippet: SnippetModel, collectionName: string, tags: Array<strin
     )
     .then(() => {
       clients.tag.RemoveTagsFromSnippet(snippet.snippetID).then(async () => {
-        tags.map(async (tagName) => {
-          await clients.tag.AddNewTag(tagName, snippet.snippetID).catch((error: any) => {
-            console.error('Error:', error)
+        if (tags !== undefined && tags !== null) {
+          tags.map(async (tagName) => {
+            await clients.tag.AddNewTag(tagName, snippet.snippetID).catch((error: any) => {
+              console.error('Error:', error)
+            })
           })
-        })
+        }
+
+        console.log('collectionName')
         console.log(collectionName)
-        if (collectionName != undefined && collectionName != null && collectionName != '') {
+        if (collectionName !== undefined && collectionName !== null && collectionName !== '') {
           console.log(snippetsStore.CurrentSnippet.collectionID)
           if (
-            snippetsStore.CurrentSnippet.collectionID != '' &&
-            snippetsStore.CurrentSnippet.collectionID != undefined &&
-            snippetsStore.CurrentSnippet.collectionID != null
+            snippetsStore.CurrentSnippet.collectionID !== '' &&
+            snippetsStore.CurrentSnippet.collectionID !== undefined &&
+            snippetsStore.CurrentSnippet.collectionID !== null
           ) {
-            console.log('remocing old colelction')
+            console.log('removing old collection')
             await clients.collection.RemoveSnippetFromCollectionById(
               snippetsStore.CurrentSnippet.collectionID,
               snippet.snippetID

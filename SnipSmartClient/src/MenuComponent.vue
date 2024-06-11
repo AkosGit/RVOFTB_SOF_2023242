@@ -10,6 +10,7 @@ import {
   HomeOutline as HomeIcon,
   SearchOutline as SearchIcon,
   PersonCircleOutline as UserIcon,
+  LogOutOutline as LogoutIcon,
   FolderOpenOutline as CollectionsIcon,
   AddCircleOutline as NewSnippetIcon
 } from '@vicons/ionicons5'
@@ -110,7 +111,7 @@ const menuOptions: MenuOption[] = [
   {
     label: 'Logout',
     key: 'logout',
-    icon: renderIcon(UserIcon)
+    icon: renderIcon(LogoutIcon)
   }
 ]
 

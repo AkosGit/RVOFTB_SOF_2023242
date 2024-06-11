@@ -145,7 +145,7 @@ if (snippets.isSearchInProgress) {
 <template>
   <div style="width: 100%; height: 100%">
     <div>
-      <h3 v-if="snippets.snippetSource != 'NONE'">Current results for:</h3>
+      <h3 v-if="snippets.snippetSource !== 'NONE'">Current results for:</h3>
       <h4 class="search-result" v-if="snippets.snippetSource == 'COLLECTION'">
         '{{ snippets.CollectionName }}' collection
       </h4>

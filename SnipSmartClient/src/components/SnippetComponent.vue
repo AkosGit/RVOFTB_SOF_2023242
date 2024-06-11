@@ -21,7 +21,7 @@ const props = defineProps<{
   oldSnippet?: SnippetModel
   title: string
   submitMessage: string
-  onSubmitClicked: (snippet: SnippetModel, collectionName: string, tags: Array<string>) => void
+  onSubmitClicked: (snippet: SnippetModel, tags: Array<string>, collectionName?: string) => void
 }>()
 
 const clients = useClientStore()
@@ -41,7 +41,7 @@ var contentSubTypeOptions: Ref<Array<SelectMixedOption>> = ref([])
 
 const contentTypeValue = ref(null)
 
-if (props.oldSnippet != null) {
+if (props.oldSnippet !== null && props.oldSnippet !== undefined) {
   //@ts-ignore
   contentSubTypeValue.value = props.oldSnippet.contentSubType
   SetLang(props.oldSnippet.contentSubType)
@@ -162,6 +162,8 @@ function GetCollections() {
     .catch((error: any) => {})
 }
 function submit() {
+  console.log('selected collection')
+  console.log(collectionsSelected.value)
   if (props.oldSnippet != undefined) {
     var collectionID = ''
     if (props.oldSnippet.collectionID != null || props.oldSnippet.collectionID != undefined) {
@@ -177,8 +179,8 @@ function submit() {
         content: code.value,
         description: description.value
       } as SnippetModel,
-      String(collectionsSelected.value),
-      tags.value
+      tags.value,
+      collectionsSelected.value
     )
   } else {
     props.onSubmitClicked(
@@ -191,8 +193,8 @@ function submit() {
         content: code.value,
         description: description.value
       } as SnippetModel,
-      String(collectionsSelected.value),
-      tags.value
+      tags.value,
+      collectionsSelected.value
     )
   }
 }
