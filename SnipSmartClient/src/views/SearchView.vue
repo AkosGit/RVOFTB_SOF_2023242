@@ -28,12 +28,12 @@ watch(contentTypeValue, (contentType) => {
   if (contentType == 'code') {
     contentSubTypeOptions.value = [
       {
-        label: 'Javascript',
+        label: 'js',
         value: 'js',
         disabled: false
       },
       {
-        label: 'Python',
+        label: 'python',
         value: 'python',
         disabled: false
       }
@@ -47,12 +47,12 @@ watch(contentTypeValue, (contentType) => {
         disabled: false
       },
       {
-        label: 'Markdown',
+        label: 'md',
         value: 'md',
         disabled: false
       },
       {
-        label: 'JSON',
+        label: 'json',
         value: 'json',
         disabled: false
       }

@@ -15,6 +15,7 @@ import {
 } from '@vicons/ionicons5'
 import { useClientStore } from './stores/clients'
 import type { VueCookies } from 'vue-cookies'
+import { useSnippetStore } from './stores/snippets'
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -128,12 +129,19 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const clients = useClientStore()
+    const snippets = useSnippetStore()
     const $cookies = inject<VueCookies>('$cookies')
 
     function Logout() {
       if ($cookies) {
         $cookies.remove('token')
         clients.updateJWT('')
+        snippets.snippetSource = 'NONE'
+        snippets.isSearchInProgress = false
+        snippets.snippets = []
+        snippets.tags = []
+        snippets.DistinctTagNames = []
+
         router.push({ name: 'login' })
         router.forward()
       }

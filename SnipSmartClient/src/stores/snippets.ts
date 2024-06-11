@@ -6,8 +6,9 @@ export const useSnippetStore = defineStore('snippets', {
   state: () => ({
     snippets: new Array<SnippetModel>(),
     tags: new Array<TagModel>(),
-    snippetSource: 'ALL',
+    snippetSource: 'NONE',
     collectionID: '',
+    CollectionName: '',
     isSearchInProgress: false,
     searchTargetType: '',
     searchTargetSubType: '',

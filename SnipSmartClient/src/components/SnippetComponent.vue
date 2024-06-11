@@ -34,9 +34,9 @@ const collectionOptions: Ref<Array<SelectMixedOption>> = ref([])
 //const dark: Ref<boolean> = ref(window.matchMedia('(prefers-color-scheme: dark)').matches)
 const dark: Ref<boolean> = ref(false)
 
-var lang: LanguageSupport = md()
+var lang = ref(md())
 
-const contentSubTypeValue = ref(undefined)
+const contentSubTypeValue = ref('')
 var contentSubTypeOptions: Ref<Array<SelectMixedOption>> = ref([])
 
 const contentTypeValue = ref(null)
@@ -44,6 +44,7 @@ const contentTypeValue = ref(null)
 if (props.oldSnippet != null) {
   //@ts-ignore
   contentSubTypeValue.value = props.oldSnippet.contentSubType
+  SetLang(props.oldSnippet.contentSubType)
   //@ts-ignore
   contentTypeValue.value = props.oldSnippet.contentType
   SetContentType(props.oldSnippet.contentType)
@@ -63,6 +64,29 @@ if (props.oldSnippet != null) {
         //@ts-ignore
         collectionsSelected.value = collection.collectionName
       })
+  }
+}
+function SetLang(subContentType: string) {
+  switch (subContentType) {
+    case 'md': {
+      //@ts-ignore
+      lang.value = md()
+      break
+    }
+    case 'json': {
+      //@ts-ignore
+      lang.value = json()
+      break
+    }
+    case 'js': {
+      //@ts-ignore
+      lang.value = javascript()
+      break
+    }
+    case 'python': {
+      //@ts-ignore
+      lang.value = python()
+    }
   }
 }
 function SetContentType(contentType: string) {
@@ -101,7 +125,7 @@ function SetContentType(contentType: string) {
   }
 }
 watch(contentTypeValue, async (contentType) => {
-  contentSubTypeValue.value = undefined
+  contentSubTypeValue.value = ''
   SetContentType(String(contentType))
 })
 
@@ -119,24 +143,9 @@ const contentTypeOptions = [
 ]
 
 watch(contentSubTypeValue, async (newContentSubTypeValue) => {
-  switch (String(newContentSubTypeValue)) {
-    case 'md': {
-      lang = md()
-      break
-    }
-    case 'json': {
-      lang = json()
-      break
-    }
-    case 'js': {
-      lang = javascript()
-      break
-    }
-    case 'python': {
-      lang = python()
-    }
-  }
+  SetLang(String(newContentSubTypeValue))
 })
+
 function GetCollections() {
   clients.collection
     .GetCollections()
@@ -214,7 +223,15 @@ GetCollections()
       </n-flex>
     </n-card>
     <div style="height: 10vh">
-      <code-mirror v-model="code" basic :dark="dark" :lang="lang" style="height: 100%" />
+      <h4 style="margin: 5px; margin-left: 0px">Snippet Content:</h4>
+      <code-mirror
+        :key="contentSubTypeValue"
+        v-model="code"
+        basic
+        :dark="dark"
+        :lang="lang"
+        style="height: 100%"
+      />
     </div>
   </div>
 </template>

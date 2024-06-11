@@ -12,7 +12,8 @@ import {
   NButton,
   useMessage,
   NGrid,
-  NGridItem
+  NGridItem,
+  NDivider
 } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
 import type { CollectionModel } from '@/models/CollectionModel'
@@ -37,8 +38,9 @@ function GetCollections() {
     .catch((error: any) => {})
 }
 
-function GoToSnippets(collectionID: string) {
+function GoToSnippets(collectionID: string, collectionName: string) {
   snippets.snippetSource = 'COLLECTION'
+  snippets.CollectionName = collectionName
   snippets.collectionID = collectionID
   snippets.isSearchInProgress = true
   router.push({ name: 'home' })
@@ -76,8 +78,8 @@ GetCollections()
 
 <template>
   <div style="width: 100%; height: 100%">
-    <n-flex style="padding-bottom: 5vh">
-      <n-popconfirm @positive-text="null" :negative-text="null">
+    <n-flex>
+      <n-popconfirm @positive-text="null" :negative-text="null" :show-icon="false">
         <template #trigger>
           <n-card class="card">
             <n-flex justify="center" align="center" class="card-flex">
@@ -90,7 +92,7 @@ GetCollections()
         </template>
         <template #action>
           <n-input v-model:value="collectionName" type="text" placeholder="Name" />
-          <n-button v-on:click="AddNewCollection()">Add</n-button>
+          <n-button style="margin-left: 5px" v-on:click="AddNewCollection()">Add</n-button>
         </template>
       </n-popconfirm>
 
@@ -111,10 +113,13 @@ GetCollections()
         </n-flex>
       </n-card>
     </n-flex>
-
+    <n-divider></n-divider>
     <n-flex>
       <div v-for="collection in collections" :key="collection.collectionID">
-        <n-card class="card" v-on:click="GoToSnippets(collection.collectionID)">
+        <n-card
+          class="card"
+          v-on:click="GoToSnippets(collection.collectionID, collection.collectionName)"
+        >
           <n-flex justify="center" align="center" class="card-flex" :vertical="true">
             <n-icon class="card-icon">
               <FolderIcon class="card-icon" />

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useClientStore } from '@/stores/clients'
-import TheWelcome from '../components/TheWelcome.vue'
 import type { VueCookies } from 'vue-cookies'
 import { inject, ref, watch, type Ref } from 'vue'
-import { NFlex, NCard, NSelect } from 'naive-ui'
+import { NFlex, NCard, NSelect, NDivider } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
 import { useSnippetStore } from '@/stores/snippets'
 import type { SnippetModel } from '@/models/SnippetModel'
@@ -64,7 +63,6 @@ function LoadTagOptions() {
   })
 }
 function EditSnippet(snippet: SnippetModel) {
-  console.log('edit sni')
   console.log(snippet)
   snippets.CurrentSnippet = snippet
   router.push({ name: 'editsnippet' })
@@ -146,7 +144,25 @@ if (snippets.isSearchInProgress) {
 
 <template>
   <div style="width: 100%; height: 100%">
-    <h3>Filter selected snippets by tags:</h3>
+    <div>
+      <h3 v-if="snippets.snippetSource != 'NONE'">Current results for:</h3>
+      <h4 class="search-result" v-if="snippets.snippetSource == 'COLLECTION'">
+        '{{ snippets.CollectionName }}' collection
+      </h4>
+      <h4 class="search-result" v-if="snippets.snippetSource == 'OTHER'">
+        Snippets that are not in a collection
+      </h4>
+      <h4 class="search-result" v-if="snippets.snippetSource == 'ALL'">
+        Snippets from all collections
+      </h4>
+      <h4 class="search-result" v-if="snippets.snippetSource == 'SEARCH'">
+        Search for '{{ snippets.searchTargetType }}' content type and '{{
+          snippets.searchTargetSubType
+        }}' content subtype
+      </h4>
+    </div>
+    <n-divider></n-divider>
+    <h3 style="padding-top: 0.5rem">Filter selected snippets by tags:</h3>
     <n-select
       style="padding-top: 0.5rem; max-width: 20vw"
       v-model:value="tagsSelected"
@@ -154,25 +170,28 @@ if (snippets.isSearchInProgress) {
       :fallback-option="false"
       :options="tagOptions"
     />
-    <div v-if="snippetsSelected.length != 0" style="padding-top: 0.7rem">
-      <n-flex>
-        <div v-for="snippet in snippetsSelected" :key="snippet.snippetID">
-          <n-card class="card" v-on:click="EditSnippet(snippet)">
-            <n-flex justify="center" align="center" class="card-flex" :vertical="true">
-              <a v-bind:href="snippet.link">{{
-                trimName(15, snippet.link.replace('http://', '').replace('https://', ''))
-              }}</a>
-              <p>{{ trimName(15, snippet.description) }}</p>
-            </n-flex>
-          </n-card>
-        </div>
-      </n-flex>
-    </div>
-    <div v-else>
-      <h3 style="padding-top: 2rem">
-        Ooops nothing here, except for pixels. Search snippets or open a collection!
-      </h3>
-    </div>
+    <n-card style="margin-top: 1.5rem; height: 100%">
+      <div v-if="snippetsSelected.length != 0">
+        <n-flex>
+          <div v-for="snippet in snippetsSelected" :key="snippet.snippetID">
+            <n-card class="card" v-on:click="EditSnippet(snippet)">
+              <n-flex justify="center" align="center" class="card-flex" :vertical="true">
+                <a v-bind:href="snippet.link">{{
+                  trimName(15, snippet.link.replace('http://', '').replace('https://', ''))
+                }}</a>
+                <p>{{ trimName(15, snippet.description) }}</p>
+              </n-flex>
+            </n-card>
+          </div>
+        </n-flex>
+      </div>
+      <div v-else>
+        <h3>
+          Ooops nothing here, except for pixels. Search snippets or open a collection than filter
+          for a tag!
+        </h3>
+      </div>
+    </n-card>
   </div>
 </template>
 <style scoped>
@@ -186,5 +205,8 @@ if (snippets.isSearchInProgress) {
 .card-flex {
   width: 100%;
   height: 100%;
+}
+.search-result {
+  font-weight: bold;
 }
 </style>
