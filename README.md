@@ -1,6 +1,6 @@
 # SnipSmart
 
-- Live at:
+- Live at: http://h1.szerver.cc:90
 
 ## Technologies used
 - Client: Vue3, Pinia, Native-ui, codemirror, axios
