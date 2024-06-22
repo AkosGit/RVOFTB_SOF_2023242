@@ -1,7 +1,5 @@
 # SnipSmart
 
-- Live at: http://h1.szerver.cc:90
-
 ## Technologies used
 - Client: Vue3, Pinia, Native-ui, codemirror, axios
 - Server: ASP.NET 8.0 Web API, SQLite database
